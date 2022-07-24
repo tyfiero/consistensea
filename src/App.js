@@ -6,12 +6,16 @@ import Habits from "./components/Habits";
 import { fetchImages } from "./lib/unsplash";
 import logo from "./logo.svg";
 import { useClickOutside } from "./lib/useClickOutside";
+
+import { images } from "./lib/images";
 function App() {
-  console.log(chrome.alarms);
+  console.log(chrome.storage);
+  let randomImage = images[Math.floor(Math.random() * images.length)];
+  let di = ["/img1.jpg", "/img2.jpg", "img3.jpg", "img4.jpg"];
+  let randomDownloadedImg = di[Math.floor(Math.random() * di.length)];
+  console.log(randomDownloadedImg);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [url, setUrl] = useState(
-    "https://images.unsplash.com/photo-1466094899371-97b327dff551?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-  );
+  const [url, setUrl] = useState(String(randomDownloadedImg));
   const menuRef = createRef();
 
   const onClickOutside = () => {
@@ -21,6 +25,8 @@ function App() {
   useClickOutside(menuRef, onClickOutside);
 
   useEffect(() => {
+    console.time("fetchImage");
+    // setUrl();
     // fetchImages()
     //   .then((images) => {
     //     console.log(images);
@@ -28,32 +34,39 @@ function App() {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-
-    const getImage = async () => {
-      const res = await fetch(
-        "https://source.unsplash.com/1337x752/?purple,nature"
-      )
-        .then((img) => {
-          console.log(img);
-          setUrl(img.url);
-        })
-        .catch((err) => console.log(err));
-    };
-
-    getImage();
+    // const getImage = async () => {
+    //   const res = await fetch(
+    //     "https://source.unsplash.com/1337x752/?purple,nature"
+    //   )
+    //     .then((img) => {
+    //       console.log(img);
+    //       setUrl(img.url);
+    //     })
+    //     .catch((err) => console.log(err));
+    // };
+    // getImage();
   }, []);
   return (
     <div
       className="App relative "
-      // style={{
-      //   backgroundImage: `url(${url})`,
-      // }}
+      style={
+        {
+          // backgroundImage: `url(${url})`,
+          // backgroundColor: `#000`,
+        }
+      }
     >
-      <img
-        src={url}
-        alt="background "
-        className="w-screen h-screen -z-10 fixed"
-      />
+      <div className=" -z-10 fixed ">
+        {/* <div className=" -z-10 fixed bg-gradient-to-br from-sky-300 via-sky-400 to-sky-600"> */}
+        <img
+          src={url}
+          alt="background "
+          onLoad={() => {
+            console.timeEnd("fetchImage");
+          }}
+          className="object-cover w-screen h-screen fade-effect-turbo -z-[5]"
+        />
+      </div>
       <div className="flex flex-col items-center justify-center w-full h-full overflow-hidden">
         <Habits />
       </div>
