@@ -1,0 +1,216 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .page-container {
+    @apply h-full w-full flex flex-col items-center p-5 mb-[20em] fade-effect-quick;
+  }
+  .heading-lg {
+    @apply text-center text-5xl mb-10 font-extrabold text-sky-600 dark:text-sky-100 f1;
+  }
+  .heading-md {
+    @apply text-center text-3xl mb-5 font-extrabold text-sky-600 dark:text-sky-100 f1;
+  }
+  .heading-sm {
+    @apply text-center text-xl mb-2 font-extrabold text-sky-600 dark:text-sky-100 f1;
+  }
+  .textarea-tw {
+    @apply bg-[hsla(200,0%,100%,1)]  dark:bg-[hsla(200,0%,10%,1)]  placeholder:text-slate-400 dark:placeholder:text-slate-300 text-slate-800 dark:text-slate-100 rounded-lg dark:!shadow-white textarea-box;
+  }
+  .button-1 {
+    @apply flex items-center gap-2 px-10 py-2 text-white transition rounded-full shadow-lg bg-sky-500 shadow-sky-300 hover:bg-sky-600 hover:shadow-sky-400 hover:shadow-xl hover:scale-105 active:scale-90;
+  }
+  p {
+    @apply text-slate-800 dark:text-slate-50 f2;
+  }
+  label {
+    @apply text-slate-800 dark:text-slate-50 f2;
+  }
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.f1 {
+  /* font-family: "Varela Round", sans-serif; */
+  font-weight: bolder;
+  font-family: "Baloo Thambi 2", sans-serif;
+  font-display: block;
+  /* font-family: "Gochi Hand", cursive; */
+}
+.f2 {
+  font-family: "Varela Round", sans-serif;
+  font-weight: bolder;
+  /* font-family: "Baloo Thambi 2", cursive; */
+  font-display: block;
+
+  /* font-family: "Gochi Hand", cursive; */
+}
+
+.glass-box {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  padding: 4px;
+}
+.normal-box-soft {
+  background: rgba(255, 255, 255, 0.364);
+  padding: 4px;
+  border-radius: 1em;
+  box-shadow: 5px 5px 17px #9898986e, -5px -5px 17px #ffffff65;
+}
+
+.fade-effect {
+  -webkit-animation: fadeIn 4s;
+  -moz-animation: fadeIn 4s;
+  -o-animation: fadeIn 4s;
+  -ms-animation: fadeIn 4s;
+  animation: fadeIn 4s;
+}
+
+.fade-effect-quick {
+  -webkit-animation: fadeIn 1.5s;
+  -moz-animation: fadeIn 1.5s;
+  -o-animation: fadeIn 1.5s;
+  -ms-animation: fadeIn 1.5s;
+  animation: fadeIn 1.5s;
+}
+
+.fade-effect-fast {
+  -webkit-animation: fadeIn 0.5s;
+  -moz-animation: fadeIn 0.5s;
+  -o-animation: fadeIn 0.5s;
+  -ms-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+}
+
+.fade-effect-turbo {
+  -webkit-animation: fadeIn 0.2s;
+  -moz-animation: fadeIn 0.2s;
+  -o-animation: fadeIn 0.2s;
+  -ms-animation: fadeIn 0.2s;
+  animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.textarea-box {
+  /* background: rgb(243, 243, 243); */
+  -webkit-appearance: none;
+
+  -webkit-box-shadow: inset 2px 2px 4px #c2c2c2, inset -2px -2px 4px #d6d6d69f;
+  box-shadow: inset 2px 2px 4px #c2c2c2, inset -2px -2px 4px #d6d6d69f;
+  border: none;
+  padding: 10px;
+  /* width: 40em; */
+  border-radius: 0.7em;
+}
+
+.logo {
+  background: linear-gradient(
+    270deg,
+    #ea617c,
+    #91a3d3,
+    #a6def6,
+    #99cd04,
+    #d8f013,
+    #f9db65
+  );
+  background-size: 400% 400%;
+
+  -webkit-animation: logo 17s ease infinite;
+  -moz-animation: logo 17s ease infinite;
+  animation: logo 17s ease infinite;
+
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+
+  -moz-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+@-webkit-keyframes logo {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes logo {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes logo {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
