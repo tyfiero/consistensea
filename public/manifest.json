@@ -5,6 +5,13 @@
   "description": "This extension is a starting point to create a real Chrome extension",
   "version": "1.0.1",
   "permissions": ["storage", "notifications", "alarms"],
+  "action": {
+    "default_title": "ConsistenSea - Habit new tab",
+    "default_popup": "index.html",
+    "default_icon": {
+      "32": "icon32.png"
+    }
+  },
   "background": {
     "service_worker": "background.js"
   },
@@ -16,13 +23,6 @@
     "32": "icon32.png",
     "48": "icon48.png",
     "128": "icon128.png"
-  },
-  "action": {
-    "default_title": "ConsistenSea - Habit new tab",
-    "default_popup": "index.html",
-    "default_icon": {
-      "32": "icon32.png"
-    }
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; script-src-elem 'self' 'unsafe-inline';"

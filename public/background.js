@@ -11,11 +11,12 @@ chrome.notifications.create(
 );
 const test = () => {
   console.log("test");
-}
-test()
+};
+test();
+
+
 
 chrome.runtime.onInstalled.addListener(() => {
-  // chrome.storage.sync.set({ color });
-  alert('Thanks for installing!');
-  console.log("Default background color set to %cgreen", `color: ${#ffffff}`);
+  console.log("HELLOOOOOO");
+  console.log("Default background color set to %cgreen", `color: #ffffff`);
 });
