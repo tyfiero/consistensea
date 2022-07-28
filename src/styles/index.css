@@ -40,7 +40,9 @@ body {
 .f1 {
   /* font-family: "Varela Round", sans-serif; */
   font-weight: bolder;
-  font-family: "Baloo Thambi 2", sans-serif;
+  font-family: "Fredoka One", sans-serif;
+  letter-spacing: 2px;
+
   font-display: block;
   /* font-family: "Gochi Hand", cursive; */
 }
@@ -204,48 +206,39 @@ body {
 }
 
 .purple {
-  text-color: #7e22ce;
+  color: #7e22ce;
   fill: #7e22ce;
-  text-decoration-color: #7e22ce;
 }
 .indigo {
-  text-color: #4338ca;
+  color: #4338ca;
   fill: #4338ca;
-  text-decoration-color: #4338ca;
 }
 .blue {
-  text-color: #00bcd4;
+  color: #00bcd4;
   fill: #00bcd4;
-  text-decoration-color: #00bcd4;
 }
 .teal {
-  text-color: #0f766e;
+  color: #0f766e;
   fill: #0f766e;
-  text-decoration-color: #0f766e;
 }
 .green {
-  text-color: #4caf50;
+  color: #4caf50;
   fill: #4caf50;
-  text-decoration-color: #4caf50;
 }
 .yellow {
-  text-color: #ffeb3b;
+  color: #ffeb3b;
   fill: #ffeb3b;
-  text-decoration-color: #ffeb3b;
 }
 .red {
-  text-color: #f44336;
+  color: #f44336;
   fill: #f44336;
-  text-decoration-color: #f44336;
 }
 .orange {
-  text-color: #ff9800;
+  color: #ff9800;
   fill: #ff9800;
-  text-decoration-color: #ff9800;
 }
 
 .black {
-  text-color: #000000;
+  color: #000000;
   fill: #000000;
-  text-decoration-color: #000000;
 }

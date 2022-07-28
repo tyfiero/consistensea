@@ -1,22 +1,13 @@
 /*global chrome*/
-chrome.notifications.create(
-  "name-for-notification",
-  {
-    type: "basic",
-    iconUrl: "image.jpeg",
-    title: "This is a notification",
-    message: "hello there!",
-  },
-  function () {}
-);
-const test = () => {
-  console.log("test");
-};
-test();
 
 
+chrome.runtime.onMessage.addListener((data) => {
+  if (data.type === "notification") {
+    chrome.notifications.create("", data.options);
+  }
+});
 
 chrome.runtime.onInstalled.addListener(() => {
-  console.log("HELLOOOOOO");
-  console.log("Default background color set to %cgreen", `color: #ffffff`);
+  console.log("Thanks for installing!");
+  // console.log("Default background color set to %cgreen", `color: #ffffff`);
 });

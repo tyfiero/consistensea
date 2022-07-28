@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 
-import { FaCheck, FaPlay, FaStop, FaUndo } from "react-icons/fa";
+import { FaCheck, FaPause, FaPlay, FaStop, FaUndo } from "react-icons/fa";
 
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import toast from "react-hot-toast";
@@ -22,11 +22,11 @@ function Circle({
   playing,
   remaining,
   done,
+  setPlay,
+  position,
 }) {
-  console.log("rerender");
-  // console.log(num);
-
-  const [start, setStart] = useState(playing);
+  // console.log("rerender");
+  // console.log(done + " from circle");
   const [key, setKey] = useState(0);
   const [edit, setEdit] = useState(false);
   const [mounted, setMounted] = useState(true);
@@ -43,8 +43,7 @@ function Circle({
   });
   const windowSize = useWindowSize();
   const circleRef = useRef(null);
-  console.log(start);
-
+  let xyPosition = position ? { x: 0, y: 0 } : null;
   // console.log(windowSize);
 
   useEffect(() => {
@@ -134,6 +133,8 @@ function Circle({
   useEffect(() => {
     if (done) {
       setMounted(false);
+    } else {
+      setMounted(true);
     }
   }, [done]);
   //This function renders the content inside the svg circle
@@ -167,65 +168,89 @@ function Circle({
             src={"../alarm-tone.mp3"}
             autoPlay={remainingTime === 0 ? true : false}
           /> */}
-          {remainingTime === 0 ? (
+          {remainingTime === 0 || done ? (
             <>
               <div className="flex flex-col items-center gap-2">
                 <p className={"text-4xl drop-shadow-xl " + textColor}>Done!</p>
               </div>
             </>
           ) : (
-            <>
+            <div className="group-hover:hidden fade-effect-fast flex flex-col items-center pt-2">
               <p
                 className={
-                  "font-bold text-2xl drop-shadow-md text-center max-w-[90%] " +
-                  (name.length > 45 ? " text-lg" : " text-2xl ") +
-                  textColor
+                  "font-bold f1  drop-shadow-md text-center max-w-[90%] " +
+                  textColor +
+                  (name.length > 45 ? " text-lg" : " text-3xl")
                 }
               >
                 {name}
               </p>
-              <div className={"text-lg font-bold " + textColor}>{timeLeft}</div>
-            </>
+              <div className={"text-lg font-bold f1 " + textColor}>
+                {timeLeft}
+              </div>
+            </div>
           )}
         </div>
 
         <div
           className={
-            "absolute flex flex-col items-center justify-between z-20 rounded-full  group-hover:opacity-100 opacity-0 transition duration-500 w-full h-full p-5 scale-90"
+            "absolute flex flex-col items-center justify-between z-20 rounded-full  group-hover:opacity-100 opacity-0 transition duration-500 w-full h-full p-5 scale-90   "
           }
         >
           <button
             className={
-              "items-center hidden gap-2 px-1 py-0  font-bold  transition rounded-lg group-hover:flex hover:scale-110 active:scale-90  hover:bg-white/40 text-sm " +
+              "items-center hidden gap-2 px-1 py-0  font-bold  transition rounded-lg group-hover:flex hover:scale-110 active:scale-90  hover:bg-white/40 text-base f2 " +
               textColor
             }
             onClick={() => {
               setKey((prevKey) => prevKey + 1);
-              setStart(false);
+              setRemaining(num, time * 60);
+              setPlay(num, false);
             }}
           >
-            <FaUndo /> Reset
+            <FaUndo />
+            Reset
           </button>
+
           <button
             className={
-              "items-center hidden gap-2 text-xl font-bold transition group-hover:flex rounded-xl px-3 py-1 hover:scale-110 active:scale-90  hover:bg-white/40 "
+              "items-center justify-center hidden gap-2 text-5xl font-bold transition group-hover:flex rounded-xl hover:scale-110 active:scale-90  mt-1 hover:brightness-150 f2  "
             }
             onClick={() => {
-              setStart(!start);
+              // console.log(playing + " on click");
+
+              if (playing) {
+                setPlay(num, false);
+              } else {
+                setPlay(num, true);
+              }
             }}
           >
             {" "}
-            {start ? (
+            {playing ? (
               <>
-                <p className={textColor}>Stop</p>
-                <FaStop className={textColor} />{" "}
+                {/* <p className={textColor}>Stop</p> */}
+                <FaPause className={textColor} />{" "}
               </>
             ) : (
               <>
-                <p className={textColor}>Start</p>
-                <FaPlay className={textColor} />{" "}
+                {/* <p className={textColor}>Start</p> */}
+                <FaPlay className={textColor + " ml-3 "} />{" "}
               </>
             )}
+          </button>
+
+          <button
+            className={
+              "items-center hidden gap-1  font-bold transition group-hover:flex rounded-xl px-3 !py-0 hover:scale-110 active:scale-90 text-base hover:bg-white/40  " +
+              textColor
+            }
+            onClick={() => {
+              setPlay(num, false);
+              setAsDone(num, true);
+            }}
+          >
+            Done <FaCheck className="text-lg" />
           </button>
         </div>
       </div>
@@ -235,7 +260,7 @@ function Circle({
     <AnimatePresence>
       {mounted && (
         <motion.div
-          className={"flex items-center justify-center  "}
+          className={"flex items-center justify-center    "}
           ref={circleRef}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -254,14 +279,15 @@ function Circle({
             right: bounds.right,
             bottom: bounds.bottom,
           }}
+          style={xyPosition}
         >
           <CountdownCircleTimer
-            isPlaying={start}
+            isPlaying={playing}
             key={key}
             duration={time * 60}
             initialRemainingTime={remaining}
             size={180}
-            strokeWidth={start ? 16 : 0}
+            strokeWidth={playing ? 16 : 0}
             rotation="counterclockwise"
             colors={ringColor}
             trailColor="transparent"
@@ -272,22 +298,12 @@ function Circle({
               }
             }}
             onComplete={() => {
-              setStart(false);
+              setPlay(num, false);
               toast.success("Times up!", {
                 icon: "⏰",
                 position: "top-center",
                 duration: 6000,
               });
-
-              if (!localMode) {
-                chrome.notifications.create("Complete", {
-                  type: "basic",
-                  iconUrl: "icon-128.png",
-                  title: (name || "Timer") + " is done!",
-                  message: "Nice work! Keep Going!",
-                  priority: 2,
-                });
-              }
 
               setAsDone(num);
               setTimeout(() => {

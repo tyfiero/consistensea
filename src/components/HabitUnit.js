@@ -10,6 +10,8 @@ import { FaTrashAlt } from "react-icons/fa";
 
 import { colorOptions } from "../lib/colorOptions";
 
+import { useKeyPress } from "../lib/useKeyPress";
+
 function HabitUnit({
   habit,
   pointer,
@@ -17,11 +19,15 @@ function HabitUnit({
   allHabits,
   setUpdate,
   update,
+  soundOn,
 }) {
   //TODO unmounting of this component messes up formating of the min/h and time
   const [colorOpen, setColorOpen] = useState(false);
   const [text, setText] = useState(habit.name);
-
+  let beep = new Audio("assets/click.mp3");
+  beep.volume = 0.4;
+  let boop = new Audio("assets/click2.mp3");
+  boop.volume = 0.4;
   let defaultTime = habit.time > 60 ? habit.time / 60 : habit.time;
   const [timeAmount, setTimeAmount] = useState(habit.time);
   let defaultUnit = habit.time > 60 ? "h" : "min";
@@ -34,6 +40,21 @@ function HabitUnit({
   const [minOrH, setMinOrH] = useState(true);
   const [displayColor, setDisplayColor] = useState(`bg-sky-500`);
   let array = allHabits;
+  const enter = useKeyPress("Enter");
+
+  useEffect(() => {
+    if (enter && array[pointer].name !== text) {
+      array[pointer].name = text;
+      setAllHabits(array);
+      setUpdate(!update);
+      document.activeElement.blur();
+    } else if (enter && array[pointer].time === timeAmount) {
+      array[pointer].time = timeAmount;
+      setAllHabits(array);
+      setUpdate(!update);
+      document.activeElement.blur();
+    }
+  }, [enter]);
 
   //   console.log(pointer);
   useEffect(() => {
@@ -104,6 +125,7 @@ function HabitUnit({
           type="text"
           value={text}
           className="min-w-[1em] !w-2/3 !px-2 text-sm !py-1  text-center textarea-tw"
+          placeholder="Name"
           onChange={(e) => setText(e.target.value)}
           onBlur={() => {
             array[pointer].name = text;
@@ -131,20 +153,23 @@ function HabitUnit({
                 toast.error("Time must be greater than 0");
               }
             }}
-            onBlur={() => {}}
             className="min-w-[1em] !w-1/3 !px-2 text-sm !py-1  text-center textarea-tw"
           />
           <button
             className=" h-fit items-center justify-center p-0  transition rounded-md drop-shadow-xl md:hover:scale-105 ring-1 ring-sky-700 md:active:scale-95 min-w-[32px] text-sky-800 bg-gradient-to-br from-white to-sky-200"
             onClick={() => {
               if (minOrH) {
-                console.log("min");
+                if (soundOn) {
+                  beep.play();
+                }
                 let formattedTime = timeAmount;
                 array[pointer].time = formattedTime;
                 setAllHabits(array);
                 setMinOrH(!minOrH);
               } else {
-                console.log("h");
+                if (soundOn) {
+                  boop.play();
+                }
 
                 let formattedTime = timeAmount * 60;
                 array[pointer].time = formattedTime;
@@ -169,6 +194,9 @@ function HabitUnit({
               : " text-base px-2 ")
           }
           onClick={() => {
+            if (soundOn) {
+              habit.size === "scale-150" ? boop.play() : beep.play();
+            }
             let nextSize =
               habit.size === "scale-75"
                 ? "scale-100"
@@ -198,6 +226,9 @@ function HabitUnit({
               displayColor
             }
             onClick={() => {
+              if (soundOn) {
+                beep.play();
+              }
               setColorOpen(!colorOpen);
             }}
           ></button>
@@ -213,6 +244,9 @@ function HabitUnit({
                     option.circleCol
                   }
                   onClick={() => {
+                    if (soundOn) {
+                      boop.play();
+                    }
                     setColor(option.colorText);
                     array[pointer].color = option.colorText;
                     setAllHabits(array);
@@ -227,7 +261,9 @@ function HabitUnit({
         <button
           onClick={() => {
             //   console.log(pointer);
-
+            if (soundOn) {
+              boop.play();
+            }
             if (pointer > 0) {
               array.splice(pointer, 1);
               setAllHabits(array);
