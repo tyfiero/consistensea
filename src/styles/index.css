@@ -16,23 +16,56 @@
     @apply text-center text-xl mb-2 font-extrabold text-sky-600 dark:text-sky-100 f1;
   }
   .textarea-tw {
-    @apply bg-[hsla(200,0%,100%,1)]  dark:bg-[hsla(200,0%,10%,1)]  placeholder:text-slate-400 dark:placeholder:text-slate-300 text-slate-800 dark:text-slate-100 rounded-lg dark:!shadow-white ring-1;
+    @apply bg-[hsla(200,0%,100%,1)]  dark:bg-[hsla(200,0%,10%,1)]  placeholder:text-slate-400 dark:placeholder:text-slate-300 text-slate-800 dark:text-slate-300 rounded-lg dark:!shadow-white ring-1;
   }
   .button-1 {
     @apply flex items-center gap-2 px-10 py-2 text-white transition rounded-full shadow-lg bg-sky-500 shadow-sky-300 hover:bg-sky-600 hover:shadow-sky-400 hover:shadow-xl hover:scale-105 active:scale-90;
   }
   p {
-    @apply text-slate-800 dark:text-slate-50 f2;
+    @apply text-sky-800 dark:text-sky-200 f2;
   }
   label {
     @apply text-slate-800 dark:text-slate-50 f2;
   }
+  .my-react-select-container .my-react-select__control {
+    @apply bg-white dark:bg-slate-700 border-2 border-slate-300 dark:border-slate-500 text-xs hover:border-slate-400 dark:hover:border-slate-500 rounded-xl;
+  }
+
+  .my-react-select-container .my-react-select__control--is-focused {
+    @apply border-slate-500 hover:border-slate-500 dark:border-slate-400 dark:hover:border-slate-400 shadow-none;
+  }
+
+  .my-react-select-container .my-react-select__menu {
+    @apply bg-slate-100 dark:bg-slate-700 border-2 border-slate-300 dark:border-slate-600;
+  }
+
+  .my-react-select-container .my-react-select__option {
+    @apply text-slate-600 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-800;
+  }
+  /* .my-react-select-container .my-react-select__option--is-focused {
+    @apply bg-slate-200 dark:bg-slate-800;
+  } */
+
+  .my-react-select-container .my-react-select__indicator-separator {
+    @apply bg-slate-400;
+  }
+
+  .my-react-select-container .my-react-select__input-container,
+  .my-react-select-container .my-react-select__placeholder,
+  .my-react-select-container .my-react-select__single-value {
+    @apply text-slate-600 dark:text-slate-200 font-bold;
+  }
+}
+
+:root {
+  --bg: #000000;
 }
 
 body {
   margin: 0;
   height: 100%;
   overflow: hidden;
+  background-color: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -150,12 +183,11 @@ body {
 .logo {
   background: linear-gradient(
     270deg,
-    #ea617c,
-    #91a3d3,
-    #a6def6,
-    #99cd04,
-    #d8f013,
-    #f9db65
+    #a6e04a,
+    #08cc3f,
+    #21c7ed,
+    #1076ea,
+    #6219ea
   );
   background-size: 400% 400%;
 
@@ -171,6 +203,28 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
+.logo2 {
+  background: linear-gradient(
+    270deg,
+    #6219ea,
+    #1076ea,
+    #21c7ed,
+    #08cc3f,
+    #a6e04a
+  );
+  background-size: 400% 400%;
+
+  -webkit-animation: logo 17s ease infinite;
+  -moz-animation: logo 17s ease infinite;
+  animation: logo 17s ease infinite;
+
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+
+  -moz-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+}
 @-webkit-keyframes logo {
   0% {
     background-position: 0% 50%;
@@ -241,4 +295,65 @@ body {
 .black {
   color: #000000;
   fill: #000000;
+}
+
+.toggler-wrapper {
+  display: block;
+  width: 55px;
+  height: 27px;
+  cursor: pointer;
+  position: relative;
+}
+
+.toggler-wrapper input[type="checkbox"] {
+  display: none;
+}
+
+.toggler-wrapper input[type="checkbox"]:checked + .toggler-slider {
+  background-color: #1cbaff;
+}
+
+.toggler-wrapper .toggler-slider {
+  border: 1px solid #9e9e9e;
+  position: absolute;
+  border-radius: 100px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: all 300ms ease;
+  transition: all 300ms ease;
+}
+
+.toggler-wrapper .toggler-knob {
+  position: absolute;
+  -webkit-transition: all 300ms ease;
+  transition: all 300ms ease;
+}
+
+.toggler-wrapper.slider input[type="checkbox"]:checked + .toggler-slider {
+  background-color: #e8f8ff;
+}
+
+.toggler-wrapper.slider
+  input[type="checkbox"]:checked
+  + .toggler-slider
+  .toggler-knob {
+  left: calc(100% - 19px - 3px);
+  background: conic-gradient(#5acbfc, #06a0e2);
+  -webkit-transform: rotate(360deg);
+  transform: rotate(360deg);
+}
+
+.toggler-wrapper.slider .toggler-knob {
+  width: calc(25px - 6px);
+  height: calc(25px - 6px);
+  border-radius: 50%;
+  left: 3px;
+  top: 3px;
+  background: conic-gradient(#bababa, #5c5d5e);
+}
+
+.css-tlfecz-indicatorContainer {
+  padding: 0px !important;
 }

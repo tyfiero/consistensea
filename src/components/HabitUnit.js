@@ -2,11 +2,16 @@
 
 import Circle from "./Circle";
 // import TimerMenu from "@/components/devlab/TimerMenu";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import toast from "react-hot-toast";
 
-import { FaTrashAlt } from "react-icons/fa";
+import {
+  FaRegTimesCircle,
+  FaTimes,
+  FaTimesCircle,
+  FaTrashAlt,
+} from "react-icons/fa";
 
 import { colorOptions } from "../lib/colorOptions";
 
@@ -19,11 +24,13 @@ function HabitUnit({
   allHabits,
   setUpdate,
   update,
+  index,
   soundOn,
 }) {
   //TODO unmounting of this component messes up formating of the min/h and time
   const [colorOpen, setColorOpen] = useState(false);
   const [text, setText] = useState(habit.name);
+  const [src, setSrc] = useState(habit.src);
   let beep = new Audio("assets/click.mp3");
   beep.volume = 0.4;
   let boop = new Audio("assets/click2.mp3");
@@ -31,13 +38,13 @@ function HabitUnit({
   let defaultTime = habit.time > 60 ? habit.time / 60 : habit.time;
   const [timeAmount, setTimeAmount] = useState(habit.time);
   let defaultUnit = habit.time > 60 ? "h" : "min";
-
   const [unit, setUnit] = useState(defaultUnit);
   const [color, setColor] = useState(habit.color);
   let defaultSize =
     habit.size === "scale-75" ? "sm" : habit.size === "scale-100" ? "md" : "lg";
   const [sizeLabel, setSizeLabel] = useState(defaultSize);
   const [minOrH, setMinOrH] = useState(true);
+  const [addUrl, setAddUrl] = useState(false);
   const [displayColor, setDisplayColor] = useState(`bg-sky-500`);
   let array = allHabits;
   const enter = useKeyPress("Enter");
@@ -115,16 +122,24 @@ function HabitUnit({
   return (
     <div
       className={
-        "flex  items-center justify-center w-full h-full fade-effect-quick relative  " +
+        "flex  items-center justify-center w-full h-full fade-effect-quick relative gap-3 " +
         (pointer > 0 ? "border-t-2 border-slate-400/40 " : "")
       }
     >
-      <div className="flex gap-2 items-center m-2 w-1/3">
-        <p className="text-l font-bold text-sky-700">{pointer + 1 + ". "}</p>
+      <div className="relative flex items-center w-1/3 gap-2 m-2">
+        <p className="font-bold f1 text-l text-sky-700">{pointer + 1 + ". "}</p>
+        <p
+          className={
+            "absolute flex text-xs text-center -top-5 left-24 text-slate-800/40  f1 " +
+            (index === 0 ? " " : " !hidden")
+          }
+        >
+          Name
+        </p>
         <input
           type="text"
           value={text}
-          className="min-w-[1em] !w-2/3 !px-2 text-sm !py-1  text-center textarea-tw"
+          className="min-w-[1em] !px-2 text-sm !py-1  text-center textarea-tw f1 placeholder:!text-slate-800/20 dark:placeholder:!text-slate-100/20"
           placeholder="Name"
           onChange={(e) => setText(e.target.value)}
           onBlur={() => {
@@ -134,59 +149,132 @@ function HabitUnit({
           }}
         />
       </div>
-      <div className="flex gap-2 items-center m-2 w-1/3">
-        <div className="flex justify-center gap-1 items-center">
-          <input
-            type="number"
-            value={timeAmount}
-            placeholder="10"
-            onChange={(e) => {
-              if (e.target.value > 0) {
-                setTimeAmount(e.target.value);
-                let formattedTime = minOrH
-                  ? e.target.value
-                  : e.target.value * 60;
-                array[pointer].time = formattedTime;
-                setAllHabits(array);
-                setUpdate(!update);
-              } else {
-                toast.error("Time must be greater than 0");
-              }
-            }}
-            className="min-w-[1em] !w-1/3 !px-2 text-sm !py-1  text-center textarea-tw"
-          />
+      <div className="relative group">
+        <div className="hidden group-hover:flex bg-"></div>
+        <p
+          className={
+            "absolute flex text-xs text-center -top-5 left-10 text-slate-800/40  f1 " +
+            (index === 0 ? " " : " !hidden")
+          }
+        >
+          Link
+        </p>
+        {src && (
+          <div className="absolute z-20 items-center hidden max-w-md gap-2 px-2 py-1 text-xs bg-white rounded-lg shadow-lg w-fit group-hover:flex h-fit dark:bg-slate-900 dark:ring-2 dark:ring-slate-400 top-8 fade-effect">
+            <p className="break-words whitespace-pre-wrap">{src}</p>
+          </div>
+        )}
+        <input
+          type="text"
+          value={src}
+          className="min-w-[1em] z-50 w-28 !px-2 text-sm !py-1  text-center textarea-tw f1 placeholder:!text-slate-800/20 dark:placeholder:!text-slate-100/20"
+          placeholder="url"
+          onFocus={(e) => {
+            e.target.select();
+          }}
+          onChange={(e) => setSrc(e.target.value)}
+          onBlur={() => {
+            array[pointer].src = src;
+            setAllHabits(array);
+            setUpdate(!update);
+          }}
+        />
+        {src && (
           <button
-            className=" h-fit items-center justify-center p-0  transition rounded-md drop-shadow-xl md:hover:scale-105 ring-1 ring-sky-700 md:active:scale-95 min-w-[32px] text-sky-800 bg-gradient-to-br from-white to-sky-200"
+            className="absolute text-sky-600 dark:text-sky-200 top-[6px] right-1 dark:bg-black bg-white rounded-full hover:scale-110 active:scale-90"
             onClick={() => {
-              if (minOrH) {
-                if (soundOn) {
-                  beep.play();
-                }
-                let formattedTime = timeAmount;
-                array[pointer].time = formattedTime;
-                setAllHabits(array);
-                setMinOrH(!minOrH);
-              } else {
-                if (soundOn) {
-                  boop.play();
-                }
-
-                let formattedTime = timeAmount * 60;
-                array[pointer].time = formattedTime;
-                setAllHabits(array);
-                setMinOrH(!minOrH);
+              if (soundOn) {
+                boop.play();
               }
+              setSrc("");
+              array[pointer].src = "";
+              setAllHabits(array);
               setUpdate(!update);
             }}
           >
-            {minOrH ? "min" : "h"}
+            <FaRegTimesCircle />
           </button>
+        )}
+      </div>
+      <div className="flex items-center w-1/3 gap-2 m-2">
+        <div className="flex items-center justify-center gap-1 w-fit">
+          <div className="flex items-center justify-between gap-1 !w-24 relative">
+            <p
+              className={
+                "absolute flex text-xs text-center -top-5 left-2 text-slate-800/40 f1 " +
+                (index === 0 ? " " : " !hidden")
+              }
+            >
+              Time
+            </p>
+            <input
+              type="number"
+              value={timeAmount}
+              placeholder="10"
+              onChange={(e) => {
+                if (e.target.value > 0) {
+                  setTimeAmount(e.target.value);
+                  let formattedTime = minOrH
+                    ? e.target.value
+                    : e.target.value * 60;
+                  array[pointer].time = formattedTime;
+                  setAllHabits(array);
+                  setUpdate(!update);
+                } else {
+                  toast.error("Time must be greater than 0");
+                }
+              }}
+              className="min-w-[4em] f1  !w-1/3 !px-2 text-sm !py-1  text-center textarea-tw"
+            />
+            <p
+              className={
+                "absolute flex text-xs text-center -top-5 left-16 text-slate-800/40  f1" +
+                (index === 0 ? " " : " !hidden")
+              }
+            >
+              Unit
+            </p>
+            <button
+              className=" h-fit items-center justify-center p-0 px-1  transition rounded-md drop-shadow-xl md:hover:scale-105 ring-2 ring-sky-700 md:active:scale-95 min-w-[32px] dark:from-sky-500 dark:to-sky-800  text-sky-800 bg-gradient-to-br from-white to-sky-200 dark:ring-sky-300 dark:text-sky-200 f1"
+              onClick={() => {
+                if (minOrH) {
+                  if (soundOn) {
+                    beep.play();
+                  }
+                  let formattedTime = timeAmount;
+                  array[pointer].time = formattedTime;
+                  setAllHabits(array);
+                  setMinOrH(!minOrH);
+                } else {
+                  if (soundOn) {
+                    boop.play();
+                  }
+
+                  let formattedTime = timeAmount * 60;
+                  array[pointer].time = formattedTime;
+                  setAllHabits(array);
+                  setMinOrH(!minOrH);
+                }
+                setUpdate(!update);
+              }}
+            >
+              {minOrH ? "min" : "h"}
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex w-1/3 justify-between">
+      <div className="relative flex justify-between w-1/3 gap-8">
+        <p
+          className={
+            "absolute flex text-xs text-center -top-5 left-1 text-slate-800/40  f1" +
+            (index === 0 ? " " : " !hidden")
+          }
+        >
+          Size
+        </p>
         <button
           className={
-            "font-bold rounded-full p-1 transition  bg-gradient-to-b from-sky-50 to-sky-200 shadow-xl md:hover:scale-105 active:scale-95 ring-2 text-sky-800  " +
+            "font-bold rounded-full p-1 transition flex justify-center  bg-gradient-to-b from-sky-50 to-sky-200 dark:from-sky-500 dark:to-sky-800 shadow-xl md:hover:scale-105 active:scale-95 ring-2 text-sky-800  dark:text-sky-200 dark:ring-sky-300 f1 " +
             (habit.size === "scale-75"
               ? " text-xs "
               : habit.size === "scale-100"
@@ -219,7 +307,15 @@ function HabitUnit({
           {sizeLabel[0].toUpperCase() + sizeLabel.substring(1)}
         </button>
         {/* <p className="text-2xl font-bold">{habit.color}</p> */}
-        <div className="flex items-center justify-center gap-2">
+        <div className="relative flex items-center justify-center gap-2">
+          <p
+            className={
+              "absolute flex text-xs text-center -top-5 -left-2 text-slate-800/40  f1" +
+              (index === 0 ? " " : " !hidden")
+            }
+          >
+            Color
+          </p>
           <button
             className={
               "w-6 h-6 rounded-md ring-1 ring-black hover:scale-110 mr-5  " +
@@ -234,7 +330,7 @@ function HabitUnit({
           ></button>
         </div>
         {colorOpen && (
-          <div className="absolute flex items-center h-10 gap-2 px-2 bg-white rounded-lg shadow-lg w-fit -right-[82px] z-50  bottom-0">
+          <div className="absolute flex items-center h-10 gap-2 px-2 dark:bg-slate-900 dark:ring-2 dark:ring-slate-400 bg-white rounded-lg shadow-lg w-fit -right-[82px] z-50  bottom-0">
             {colorOptions.map((option, index) => {
               return (
                 <button
@@ -276,7 +372,7 @@ function HabitUnit({
         >
           <FaTrashAlt
             className={
-              "text-red-300/60   " +
+              "text-red-400/60 text-lg hover:scale-125 transition active:scale-75  " +
               (pointer > 0 ? " opacity-100" : " opacity-0 cursor-default")
             }
           />

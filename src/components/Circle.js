@@ -2,15 +2,19 @@
 
 import { useState, useRef, useEffect } from "react";
 
-import { FaCheck, FaPause, FaPlay, FaStop, FaUndo } from "react-icons/fa";
+import {
+  FaCheck,
+  FaExternalLinkAlt,
+  FaPause,
+  FaPlay,
+  FaUndo,
+} from "react-icons/fa";
 
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
-import { useWindowSize } from "../lib/useWindowSize";
-import { localMode } from "../lib/constants";
-import Habits from "./Habits";
+// import { useWindowSize } from "../lib/useWindowSize";
 
 function Circle({
   num,
@@ -20,115 +24,119 @@ function Circle({
   setAsDone,
   setRemaining,
   playing,
+  streak,
   remaining,
   done,
   setPlay,
-  position,
+  src,
 }) {
-  // console.log("rerender");
-  // console.log(done + " from circle");
+  // console.log(remaining + " from circle init");
   const [key, setKey] = useState(0);
-  const [edit, setEdit] = useState(false);
   const [mounted, setMounted] = useState(true);
   const [bgColor, setBgColor] = useState(
     "bg-gradient-to-br from-sky-50 via-sky-300 to-sky-700   "
   );
   const [ringColor, setRingColor] = useState("#0369a1");
   const [textColor, setTextColor] = useState("  text-sky-800");
-  const [bounds, setBounds] = useState({
-    top: 100,
-    left: 100,
-    right: 100,
-    bottom: 100,
-  });
-  const windowSize = useWindowSize();
+  // const [bounds, setBounds] = useState({
+  //   top: 100,
+  //   left: 100,
+  //   right: 100,
+  //   bottom: 100,
+  // });
+  // const windowSize = useWindowSize();
+
+  // useEffect(() => {
+  //   setBounds({
+  //     top: circleRef.current.getBoundingClientRect().top * -1 + 80,
+  //     left: circleRef.current.getBoundingClientRect().left * -1 + 100,
+  //     right:
+  //       windowSize.width -
+  //       circleRef.current.getBoundingClientRect().right -
+  //       100,
+  //     bottom:
+  //       windowSize.height -
+  //       circleRef.current.getBoundingClientRect().bottom -
+  //       100,
+  //   });
+  // }, [windowSize]);
+
   const circleRef = useRef(null);
-  let xyPosition = position ? { x: 0, y: 0 } : null;
-  // console.log(windowSize);
 
   useEffect(() => {
     switch (color) {
       case "purple":
         setBgColor(
-          "bg-gradient-to-br from-purple-50 via-purple-300 to-purple-700  "
+          "bg-gradient-to-br from-purple-50 via-purple-300 to-purple-700 dark:from-purple-400 dark:via-purple-600 dark:to-purple-800  "
         );
         setRingColor("#7e22ce");
-        setTextColor("  text-purple-800");
+        setTextColor("  text-purple-800 dark:!text-purple-200");
         break;
       case "indigo":
         setBgColor(
-          "bg-gradient-to-br from-indigo-50 via-indigo-300 to-indigo-700   "
+          "bg-gradient-to-br from-indigo-50 via-indigo-300 to-indigo-700 dark:from-indigo-400 dark:via-indigo-600 dark:to-indigo-800  "
         );
         setRingColor("#4338ca");
-        setTextColor("  text-indigo-800");
+        setTextColor("  text-indigo-800 dark:!text-indigo-200");
         break;
       case "sky":
-        setBgColor("bg-gradient-to-br from-sky-50 via-sky-300 to-sky-700   ");
+        setBgColor(
+          "bg-gradient-to-br from-sky-50 via-sky-300 to-sky-700 dark:from-sky-400 dark:via-sky-600 dark:to-sky-800  "
+        );
         setRingColor("#0369a1");
-        setTextColor("  text-sky-800");
+        setTextColor("  text-sky-800 dark:!text-sky-200");
         break;
       case "teal":
         setBgColor(
-          "bg-gradient-to-br from-teal-50 via-teal-300 to-teal-700   "
+          "bg-gradient-to-br from-teal-50 via-teal-300 to-teal-700 dark:from-teal-400 dark:via-teal-600 dark:to-teal-800   "
         );
         setRingColor("#0f766e");
-        setTextColor("  text-teal-800");
+        setTextColor("  text-teal-800 dark:!text-teal-200");
         break;
       case "green":
         setBgColor(
-          "bg-gradient-to-br from-green-50 via-green-300 to-green-700   "
+          "bg-gradient-to-br from-green-50 via-green-300 to-green-700 dark:from-green-400 dark:via-green-600 dark:to-green-800   "
         );
         setRingColor("#15803d");
-        setTextColor("  text-green-800");
+        setTextColor("  text-green-800 dark:!text-green-200");
         break;
       case "yellow":
         setBgColor(
-          "bg-gradient-to-br from-yellow-50 via-yellow-300 to-yellow-700   "
+          "bg-gradient-to-br from-yellow-50 via-yellow-300 to-yellow-700  dark:from-yellow-400 dark:via-yellow-600 dark:to-yellow-800   "
         );
         setRingColor("#f9c822");
-        setTextColor("  text-yellow-800");
+        setTextColor("  text-yellow-800 dark:!text-yellow-200");
         break;
       case "orange":
         setBgColor(
-          "bg-gradient-to-br from-orange-50 via-orange-300 to-orange-700   "
+          "bg-gradient-to-br from-orange-50 via-orange-300 to-orange-700  dark:from-orange-400 dark:via-orange-600 dark:to-orange-800   "
         );
         setRingColor("#f57f22");
-        setTextColor("  text-orange-800");
+        setTextColor("  text-orange-800 dark:!text-orange-200");
         break;
       case "red":
-        setBgColor("bg-gradient-to-br from-red-50 via-red-300 to-red-700   ");
+        setBgColor(
+          "bg-gradient-to-br from-red-50 via-red-300 to-red-700 dark:from-red-400 dark:via-red-600 dark:to-red-800   "
+        );
         setRingColor("#e53e3e");
-        setTextColor("  text-red-800");
+        setTextColor("  text-red-800 dark:!text-red-200");
         break;
       case "black":
         setBgColor(
           "bg-gradient-to-br from-slate-500 via-slate-700 to-slate-900   "
         );
         setRingColor("#9ca3af");
-        setTextColor("  text-slate-50");
+        setTextColor("  text-slate-50 dark:!text-slate-200");
         break;
       default:
-        setBgColor("bg-gradient-to-br from-sky-50 via-sky-400 to-sky-700   ");
+        setBgColor(
+          "bg-gradient-to-br from-sky-50 via-sky-400 to-sky-700  dark:from-sky-400 dark:via-sky-600 dark:to-sky-800   "
+        );
         setRingColor("#0369a1");
-        setTextColor("  text-sky-800");
+        setTextColor("  text-sky-800 dark:!text-sky-200");
         break;
     }
   }, [color]);
-
-  useEffect(() => {
-    setBounds({
-      top: circleRef.current.getBoundingClientRect().top * -1 + 80,
-      left: circleRef.current.getBoundingClientRect().left * -1 + 100,
-      right:
-        windowSize.width -
-        circleRef.current.getBoundingClientRect().right -
-        100,
-      bottom:
-        windowSize.height -
-        circleRef.current.getBoundingClientRect().bottom -
-        100,
-    });
-  }, [windowSize]);
 
   useEffect(() => {
     if (done) {
@@ -171,11 +179,13 @@ function Circle({
           {remainingTime === 0 || done ? (
             <>
               <div className="flex flex-col items-center gap-2">
-                <p className={"text-4xl drop-shadow-xl " + textColor}>Done!</p>
+                <p className={"text-4xl drop-shadow-xl f1 " + textColor}>
+                  Done!
+                </p>
               </div>
             </>
           ) : (
-            <div className="group-hover:hidden fade-effect-fast flex flex-col items-center pt-2">
+            <div className="flex flex-col items-center pt-2 group-hover:hidden fade-effect-fast">
               <p
                 className={
                   "font-bold f1  drop-shadow-md text-center max-w-[90%] " +
@@ -188,6 +198,7 @@ function Circle({
               <div className={"text-lg font-bold f1 " + textColor}>
                 {timeLeft}
               </div>
+              <p>{streak}</p>
             </div>
           )}
         </div>
@@ -197,24 +208,50 @@ function Circle({
             "absolute flex flex-col items-center justify-between z-20 rounded-full  group-hover:opacity-100 opacity-0 transition duration-500 w-full h-full p-5 scale-90   "
           }
         >
-          <button
-            className={
-              "items-center hidden gap-2 px-1 py-0  font-bold  transition rounded-lg group-hover:flex hover:scale-110 active:scale-90  hover:bg-white/40 text-base f2 " +
-              textColor
-            }
-            onClick={() => {
-              setKey((prevKey) => prevKey + 1);
-              setRemaining(num, time * 60);
-              setPlay(num, false);
-            }}
-          >
-            <FaUndo />
-            Reset
-          </button>
+          <div className="flex gap-2">
+            <button
+              className={
+                "items-center hidden gap-2 h-8 w-8 justify-center font-bold  transition rounded-lg group-hover:flex hover:scale-110 active:scale-90  hover:bg-white/40 dark:hover:bg-slate-800/40  text-base f1 " +
+                textColor
+              }
+              onClick={() => {
+                setKey((prevKey) => prevKey + 1);
+                setRemaining(num, time * 60);
+                setPlay(num, false);
+              }}
+            >
+              <FaUndo />
+            </button>
+            {src && (
+              <a
+                href={src}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={
+                  "items-center hidden gap-2 h-8 w-8 justify-center font-bold  transition rounded-lg group-hover:flex hover:scale-110 active:scale-90  hover:bg-white/40 dark:hover:bg-slate-800/40  text-base f1 " +
+                  textColor
+                }
+              >
+                <FaExternalLinkAlt />
+              </a>
+            )}
+            <button
+              className={
+                "items-center hidden gap-1  h-8 w-8 justify-center font-bold transition group-hover:flex rounded-xl   hover:scale-110 active:scale-90 text-base hover:bg-white/40 dark:hover:bg-slate-800/40  " +
+                textColor
+              }
+              onClick={() => {
+                setPlay(num, false);
+                setAsDone(num, true);
+              }}
+            >
+              <FaCheck className="text-xl" />
+            </button>
+          </div>
 
           <button
             className={
-              "items-center justify-center hidden gap-2 text-5xl font-bold transition group-hover:flex rounded-xl hover:scale-110 active:scale-90  mt-1 hover:brightness-150 f2  "
+              "items-center justify-center hidden gap-2 text-5xl font-bold transition group-hover:flex rounded-xl hover:scale-110 active:scale-90  mt-1 hover:brightness-150 dark:hover:brightness-90 f2  "
             }
             onClick={() => {
               // console.log(playing + " on click");
@@ -240,18 +277,9 @@ function Circle({
             )}
           </button>
 
-          <button
-            className={
-              "items-center hidden gap-1  font-bold transition group-hover:flex rounded-xl px-3 !py-0 hover:scale-110 active:scale-90 text-base hover:bg-white/40  " +
-              textColor
-            }
-            onClick={() => {
-              setPlay(num, false);
-              setAsDone(num, true);
-            }}
-          >
-            Done <FaCheck className="text-lg" />
-          </button>
+          <div className="flex h-10">
+            Streak: <p className={textColor}>{streak}</p>
+          </div>
         </div>
       </div>
     );
@@ -260,32 +288,20 @@ function Circle({
     <AnimatePresence>
       {mounted && (
         <motion.div
-          className={"flex items-center justify-center    "}
+          className={"flex items-center justify-center  handle  "}
           ref={circleRef}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          // initial={{ opacity: 0, scale: 0.1, y: -10 }}
-          // animate={{ opacity: 1, scale: 1, y: 0 }}
-          // exit={{ opacity: 0, scale: 0.01 }}
-          transition={{ duration: 0.5, delay: num * 0.07 }}
-          drag
-          onDragEnd={(event, info) => console.log(info.point.x, info.point.y)}
-          dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-          dragElastic={0.05}
-          dragConstraints={{
-            top: bounds.top,
-            left: bounds.left,
-            right: bounds.right,
-            bottom: bounds.bottom,
-          }}
-          style={xyPosition}
+          // initial={{ opacity: 0, y: -300 }}
+          // animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0 }}
+          transition={{ duration: 0.6, delay: num * 0.2 }}
         >
           <CountdownCircleTimer
             isPlaying={playing}
             key={key}
-            duration={time * 60}
             initialRemainingTime={remaining}
+            duration={time * 60}
             size={180}
             strokeWidth={playing ? 16 : 0}
             rotation="counterclockwise"
@@ -293,7 +309,6 @@ function Circle({
             trailColor="transparent"
             onUpdate={(remainingTime) => {
               if (remainingTime % 2 === 0 && remainingTime / 60 !== time) {
-                // console.log(remainingTime);
                 setRemaining(num, remainingTime);
               }
             }}
