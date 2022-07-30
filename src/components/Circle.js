@@ -28,6 +28,7 @@ function Circle({
   remaining,
   done,
   setPlay,
+  size,
   src,
 }) {
   // console.log(remaining + " from circle init");
@@ -164,22 +165,17 @@ function Circle({
     }
 
     return (
-      <div className="relative flex items-center justify-center w-full h-full group">
+      <div className="relative flex items-center justify-center w-full h-full p-2 group">
         <div
           className={
-            " rounded-full w-full h-full  shadow-xl flex flex-col items-center justify-center scale-90   " +
+            " rounded-full w-full h-full  shadow-xl flex flex-col items-center justify-center    " +
             bgColor
           }
         >
-          {/* <audio
-            ref={audioRef}
-            src={"../alarm-tone.mp3"}
-            autoPlay={remainingTime === 0 ? true : false}
-          /> */}
           {remainingTime === 0 || done ? (
             <>
               <div className="flex flex-col items-center gap-2">
-                <p className={"text-4xl drop-shadow-xl f1 " + textColor}>
+                <p className={"text-4xl drop-shadow-xl f2 " + textColor}>
                   Done!
                 </p>
               </div>
@@ -188,30 +184,29 @@ function Circle({
             <div className="flex flex-col items-center pt-2 group-hover:hidden fade-effect-fast">
               <p
                 className={
-                  "font-bold f1  drop-shadow-md text-center max-w-[90%] " +
+                  "font-bold f2  drop-shadow-md text-center max-w-[90%] " +
                   textColor +
                   (name.length > 45 ? " text-lg" : " text-3xl")
                 }
               >
                 {name}
               </p>
-              <div className={"text-lg font-bold f1 " + textColor}>
+              <div className={"text-lg font-extrabold f1 " + textColor}>
                 {timeLeft}
               </div>
-              <p>{streak}</p>
             </div>
           )}
         </div>
-
         <div
           className={
-            "absolute flex flex-col items-center justify-between z-20 rounded-full  group-hover:opacity-100 opacity-0 transition duration-500 w-full h-full p-5 scale-90   "
+            "absolute flex flex-col items-center justify-between z-20 rounded-full opacity-0  transition duration-500 w-full h-full p-5    " +
+            (done ? " " : " group-hover:opacity-100")
           }
         >
           <div className="flex gap-2">
             <button
               className={
-                "items-center hidden gap-2 h-8 w-8 justify-center font-bold  transition rounded-lg group-hover:flex hover:scale-110 active:scale-90  hover:bg-white/40 dark:hover:bg-slate-800/40  text-base f1 " +
+                "items-center hidden gap-2 h-8 w-8 justify-center font-bold  transition rounded-lg group-hover:flex hover:scale-110 active:scale-90 cursor-pointer  hover:bg-white/40 dark:hover:bg-slate-800/40  text-base f1 " +
                 textColor
               }
               onClick={() => {
@@ -237,7 +232,7 @@ function Circle({
             )}
             <button
               className={
-                "items-center hidden gap-1  h-8 w-8 justify-center font-bold transition group-hover:flex rounded-xl   hover:scale-110 active:scale-90 text-base hover:bg-white/40 dark:hover:bg-slate-800/40  " +
+                "items-center hidden gap-1  h-8 w-8 justify-center font-bold transition group-hover:flex rounded-xl cursor-pointer   hover:scale-110 active:scale-90 text-base hover:bg-white/40 dark:hover:bg-slate-800/40  " +
                 textColor
               }
               onClick={() => {
@@ -251,7 +246,7 @@ function Circle({
 
           <button
             className={
-              "items-center justify-center hidden gap-2 text-5xl font-bold transition group-hover:flex rounded-xl hover:scale-110 active:scale-90  mt-1 hover:brightness-150 dark:hover:brightness-90 f2  "
+              "items-center justify-center hidden gap-2 text-5xl font-bold transition group-hover:flex cursor-pointer  rounded-xl hover:scale-110 active:scale-90  mt-1 hover:brightness-150 dark:hover:brightness-90 f2  "
             }
             onClick={() => {
               // console.log(playing + " on click");
@@ -277,8 +272,9 @@ function Circle({
             )}
           </button>
 
-          <div className="flex h-10">
-            Streak: <p className={textColor}>{streak}</p>
+          <div className="items-center hidden h-10 group-hover:flex">
+            <p className={textColor}>{"Streak: " + streak}</p>
+            <p className={"text-sm"}>{streak > 2 ? "🔥" : ""}</p>
           </div>
         </div>
       </div>
@@ -288,14 +284,34 @@ function Circle({
     <AnimatePresence>
       {mounted && (
         <motion.div
-          className={"flex items-center justify-center  handle  "}
+          className={"flex items-center cursor-move justify-center  handle  "}
           ref={circleRef}
           // initial={{ opacity: 0, y: -300 }}
           // animate={{ opacity: 1, y: 0 }}
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            default: {
+              duration: 0.6,
+              ease: [0, 0.71, 0.2, 1.01],
+            },
+            scale: {
+              type: "spring",
+              damping: 5,
+              stiffness: 40,
+              restDelta: 0.001,
+            },
+          }}
           exit={{ opacity: 0, scale: 0 }}
-          transition={{ duration: 0.6, delay: num * 0.2 }}
+          whileHover={{
+            scale: 1.03,
+            transition: { duration: 0.3, delay: 0 },
+          }}
+          whileTap={{
+            scale: 0.95,
+            rotate: 5,
+            transition: { duration: 0.5, delay: 0 },
+          }}
         >
           <CountdownCircleTimer
             isPlaying={playing}
@@ -303,7 +319,7 @@ function Circle({
             initialRemainingTime={remaining}
             duration={time * 60}
             size={180}
-            strokeWidth={playing ? 16 : 0}
+            strokeWidth={playing ? 10 : 0}
             rotation="counterclockwise"
             colors={ringColor}
             trailColor="transparent"

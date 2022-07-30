@@ -4,7 +4,7 @@
 
 @layer components {
   .page-container {
-    @apply h-full w-full flex flex-col items-center p-5 mb-[20em] fade-effect-quick;
+    @apply h-full w-full flex flex-col items-center px-5 fade-effect-quick;
   }
   .heading-lg {
     @apply text-center text-5xl mb-10 font-extrabold text-sky-600 dark:text-sky-100 f1;
@@ -28,15 +28,15 @@
     @apply text-slate-800 dark:text-slate-50 f2;
   }
   .my-react-select-container .my-react-select__control {
-    @apply bg-white dark:bg-slate-700 border-2 border-slate-300 dark:border-slate-500 text-xs hover:border-slate-400 dark:hover:border-slate-500 rounded-xl;
+    @apply bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-500 text-xs hover:border-slate-400 dark:hover:border-slate-500 rounded-xl f1;
   }
 
   .my-react-select-container .my-react-select__control--is-focused {
-    @apply border-slate-500 hover:border-slate-500 dark:border-slate-400 dark:hover:border-slate-400 shadow-none;
+    @apply border-slate-500  hover:border-slate-500 dark:border-slate-400 dark:hover:border-slate-400 shadow-none;
   }
 
   .my-react-select-container .my-react-select__menu {
-    @apply bg-slate-100 dark:bg-slate-700 border-2 border-slate-300 dark:border-slate-600;
+    @apply bg-slate-100 dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600 f1;
   }
 
   .my-react-select-container .my-react-select__option {
@@ -71,21 +71,13 @@ body {
 }
 
 .f1 {
-  /* font-family: "Varela Round", sans-serif; */
-  font-weight: bolder;
-  font-family: "Fredoka One", sans-serif;
-  letter-spacing: 2px;
-
+  font-family: "M PLUS Rounded 1c", sans-serif;
   font-display: block;
-  /* font-family: "Gochi Hand", cursive; */
 }
 .f2 {
-  font-family: "Varela Round", sans-serif;
-  font-weight: bolder;
-  /* font-family: "Baloo Thambi 2", cursive; */
+  font-family: "Fredoka One", sans-serif;
+  letter-spacing: 2px;
   font-display: block;
-
-  /* font-family: "Gochi Hand", cursive; */
 }
 
 .glass-box {
@@ -314,7 +306,7 @@ body {
 }
 
 .toggler-wrapper .toggler-slider {
-  border: 1px solid #9e9e9e;
+
   position: absolute;
   border-radius: 100px;
   top: 0;
@@ -350,10 +342,35 @@ body {
   height: calc(25px - 6px);
   border-radius: 50%;
   left: 3px;
-  top: 3px;
+  top: 2px;
   background: conic-gradient(#bababa, #5c5d5e);
 }
 
 .css-tlfecz-indicatorContainer {
   padding: 0px !important;
+}
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #47c1f6 #9e9e9e;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #6e6e6e;
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #47c1f6;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0ba0e0;
 }
