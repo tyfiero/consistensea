@@ -158,7 +158,7 @@ function Circle({
     const stringifiedSeconds = seconds > 9 ? seconds : `0${seconds}`;
     const stringifiedMinutes = minutes > 9 ? minutes : `0${minutes}`;
     let timeLeft;
-    if (remainingTime > 3600) {
+    if (remainingTime >= 3600) {
       timeLeft = `${hours}:${stringifiedMinutes}:${stringifiedSeconds}`;
     } else {
       timeLeft = `${minutes}:${stringifiedSeconds}`;
@@ -172,30 +172,20 @@ function Circle({
             bgColor
           }
         >
-          {remainingTime === 0 || done ? (
-            <>
-              <div className="flex flex-col items-center gap-2">
-                <p className={"text-4xl drop-shadow-xl f2 " + textColor}>
-                  Done!
-                </p>
-              </div>
-            </>
-          ) : (
-            <div className="flex flex-col items-center pt-2 group-hover:hidden fade-effect-fast">
-              <p
-                className={
-                  "font-bold f2  drop-shadow-md text-center max-w-[90%] " +
-                  textColor +
-                  (name.length > 45 ? " text-lg" : " text-3xl")
-                }
-              >
-                {name}
-              </p>
-              <div className={"text-lg font-extrabold f1 " + textColor}>
-                {timeLeft}
-              </div>
+          <div className="flex flex-col items-center pt-2 group-hover:hidden fade-effect-fast">
+            <p
+              className={
+                "font-bold f2  drop-shadow-md text-center max-w-[90%] " +
+                textColor +
+                (name.length > 45 ? " text-lg" : " text-3xl")
+              }
+            >
+              {name}
+            </p>
+            <div className={"text-lg font-extrabold f1 " + textColor}>
+              {timeLeft}
             </div>
-          )}
+          </div>
         </div>
         <div
           className={

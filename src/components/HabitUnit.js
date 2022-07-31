@@ -1,24 +1,7 @@
-/*global chrome*/
-
-import Circle from "./Circle";
-// import TimerMenu from "@/components/devlab/TimerMenu";
-import { createRef, useEffect, useRef, useState } from "react";
-
-import toast from "react-hot-toast";
-
-import {
-  FaCheck,
-  FaCheckCircle,
-  FaRegTimesCircle,
-  FaTimes,
-  FaTimesCircle,
-  FaTrashAlt,
-} from "react-icons/fa";
-
+import { useEffect, useState } from "react";
+import { FaRegTimesCircle, FaTrashAlt } from "react-icons/fa";
 import { colorOptions } from "../lib/colorOptions";
-
 import { useKeyPress } from "../lib/useKeyPress";
-import { useClickOutside } from "../lib/useClickOutside";
 
 function HabitUnit({
   habit,
@@ -30,28 +13,23 @@ function HabitUnit({
   index,
   soundOn,
 }) {
-  //TODO unmounting of this component messes up formating of the min/h and time
+  //TODO unmounting of this component messes up formatting of the min/h and time
+
   const [colorOpen, setColorOpen] = useState(false);
   const [sizeOpen, setSizeOpen] = useState(false);
   const [text, setText] = useState(habit.name);
   const [src, setSrc] = useState(habit.src);
+  const [color, setColor] = useState(habit.color);
+  const [sizeAmount, setSizeAmount] = useState(habit.size);
+  const [displayColor, setDisplayColor] = useState(`bg-sky-500`);
+  let defaultTime = habit.unit === "min" ? habit.time : habit.time / 60;
+  const [timeAmount, setTimeAmount] = useState(defaultTime);
   let beep = new Audio("assets/click.mp3");
   beep.volume = 0.4;
   let boop = new Audio("assets/click2.mp3");
   boop.volume = 0.4;
-  let defaultTime = habit.time > 60 ? habit.time / 60 : habit.time;
-  const [timeAmount, setTimeAmount] = useState(habit.time);
-  let defaultUnit = habit.time > 60 ? "h" : "min";
-  const [unit, setUnit] = useState(defaultUnit);
-  const [color, setColor] = useState(habit.color);
-
-  const [sizeAmount, setSizeAmount] = useState(habit.size);
-  const [minOrH, setMinOrH] = useState(true);
-  const [addUrl, setAddUrl] = useState(false);
-  const [displayColor, setDisplayColor] = useState(`bg-sky-500`);
   let array = allHabits;
   const enter = useKeyPress("Enter");
-
   function scale(number, inMin, inMax, outMin, outMax) {
     return ((number - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   }
@@ -69,7 +47,6 @@ function HabitUnit({
     }
   }, [enter]);
 
-  //   console.log(pointer);
   useEffect(() => {
     switch (color) {
       case "purple":
@@ -132,11 +109,16 @@ function HabitUnit({
         (pointer > 0 ? "border-t-2 border-slate-400/40 " : "")
       }
     >
-      <div className="relative flex items-center w-1/3 gap-2 m-2">
+      <div
+        className={
+          "relative flex items-center w-1/3   m-2 " +
+          (pointer > 8 ? "gap-1" : "gap-4")
+        }
+      >
         <p className="font-bold f1 text-l text-sky-700">{pointer + 1 + ". "}</p>
         <p
           className={
-            "absolute flex text-xs text-center -top-5 left-24 text-slate-800/40  f1 " +
+            "absolute flex text-xs text-center -top-5 left-24 text-sky-400  f1 " +
             (index === 0 ? " " : " !hidden")
           }
         >
@@ -145,7 +127,10 @@ function HabitUnit({
         <input
           type="text"
           value={text}
-          className="min-w-[1em] !px-2 text-sm !py-1  text-center textarea-tw f1 placeholder:!text-slate-800/20 dark:placeholder:!text-slate-100/20"
+          className={
+            "min-w-[1em] !px-2 text-sm !py-1 font-bold text-center textarea-tw f2 placeholder:!text-slate-800/20 dark:placeholder:!text-slate-100/20 " +
+            habit.color
+          }
           placeholder="Name"
           onChange={(e) => setText(e.target.value)}
           onBlur={() => {
@@ -207,7 +192,7 @@ function HabitUnit({
           <div className="flex items-center justify-between gap-1 !w-24 relative">
             <p
               className={
-                "absolute flex text-xs text-center -top-5 left-2 text-slate-800/40 f1 " +
+                "absolute flex text-xs text-center -top-5 left-4 text-slate-800/40 f1 " +
                 (index === 0 ? " " : " !hidden")
               }
             >
@@ -216,55 +201,53 @@ function HabitUnit({
             <input
               type="number"
               value={timeAmount}
-              placeholder="10"
+              placeholder="Time"
               onChange={(e) => {
-                if (e.target.value > 0) {
+                if (e.target.value >= 0) {
+                  let formattedTime =
+                    habit.unit === "min" ? e.target.value : e.target.value * 60;
                   setTimeAmount(e.target.value);
-                  let formattedTime = minOrH
-                    ? e.target.value
-                    : e.target.value * 60;
                   array[pointer].time = formattedTime;
+                  array[pointer].remaining = formattedTime * 60;
                   setAllHabits(array);
                   setUpdate(!update);
-                } else {
-                  toast.error("Time must be greater than 0");
                 }
               }}
-              className="min-w-[4em] f1  !w-1/3 !px-2 text-sm !py-1  text-center textarea-tw"
+              className="min-w-[5em] f1  !w-1/3 !px-2 text-sm !py-1  text-center textarea-tw"
             />
             <p
               className={
-                "absolute flex text-xs text-center -top-5 left-16 text-slate-800/40  f1" +
+                "absolute flex text-xs text-center -top-5 -right-3 text-slate-800/40  f1" +
                 (index === 0 ? " " : " !hidden")
               }
             >
               Unit
             </p>
             <button
-              className=" h-fit items-center justify-center p-0 px-1  transition rounded-md drop-shadow-xl md:hover:scale-105 ring-2 ring-sky-700 md:active:scale-95 min-w-[32px] dark:from-sky-500 dark:to-sky-800  text-sky-800 bg-gradient-to-br from-white to-sky-200 dark:ring-sky-300 dark:text-sky-200 f1"
+              className=" h-fit items-center justify-center p-0 px-1  transition rounded-md drop-shadow-xl md:hover:scale-105 ring-2 ring-sky-400 md:active:scale-95 min-w-[32px] dark:from-sky-500 dark:to-sky-800  text-sky-800 bg-gradient-to-br from-white to-sky-200 dark:ring-sky-300 dark:text-sky-200 f1"
               onClick={() => {
-                if (minOrH) {
+                if (habit.unit === "min") {
                   if (soundOn) {
                     beep.play();
                   }
-                  let formattedTime = timeAmount;
+                  let formattedTime = timeAmount * 60;
                   array[pointer].time = formattedTime;
+                  array[pointer].remaining = formattedTime * 60;
+                  array[pointer].unit = "hr";
                   setAllHabits(array);
-                  setMinOrH(!minOrH);
                 } else {
                   if (soundOn) {
                     boop.play();
                   }
-
-                  let formattedTime = timeAmount * 60;
-                  array[pointer].time = formattedTime;
+                  array[pointer].time = timeAmount;
+                  array[pointer].remaining = timeAmount * 60;
+                  array[pointer].unit = "min";
                   setAllHabits(array);
-                  setMinOrH(!minOrH);
                 }
                 setUpdate(!update);
               }}
             >
-              {minOrH ? "min" : "h"}
+              {habit.unit}
             </button>
           </div>
         </div>
@@ -272,56 +255,31 @@ function HabitUnit({
       <div className="relative flex justify-between w-1/3 gap-8">
         <p
           className={
-            "absolute flex text-xs text-center -top-4 left-1 text-slate-800/40  f1" +
+            "absolute flex text-xs text-center -top-4 left-7 text-slate-800/40  f1" +
             (index === 0 ? " " : " !hidden")
           }
         >
           Size
         </p>
-        <div className="flex items-center justify-center w-10 h-9">
+        <div className="flex items-center justify-center w-10 ml-6 h-9">
           <button
             className={
-              "font-bold rounded-full p-1 transition flex justify-center  bg-gradient-to-b from-sky-50 to-sky-200 dark:from-sky-500 dark:to-sky-800 shadow-xl md:hover:scale-105 active:scale-95 ring-2 text-sky-800  dark:text-sky-200 dark:ring-sky-300 f1 "
+              "font-bold rounded-full p-1 transition flex justify-center  bg-gradient-to-b from-sky-50 to-sky-200 dark:from-sky-500 dark:to-sky-800 shadow-xl md:hover:scale-105 active:scale-95 ring-2 ring-sky-400 text-sky-800  dark:text-sky-200 dark:ring-sky-300 f1 px-2 "
             }
             onClick={() => {
               setSizeOpen(!sizeOpen);
-              // if (soundOn) {
-              //   habit.size === "scale-150" ? boop.play() : beep.play();
-              // }
-              // let nextSize =
-              //   habit.size === "scale-75"
-              //     ? "scale-100"
-              //     : habit.size === "scale-100"
-              //     ? "scale-150"
-              //     : "scale-75";
-              // let label =
-              //   habit.size === "scale-75"
-              //     ? "md"
-              //     : habit.size === "scale-100"
-              //     ? "lg"
-              //     : "sm";
-              // console.log(nextSize);
-              // setSizeAmount(label);
-              // array[pointer].size = nextSize;
-              // setAllHabits(array);
-              // setUpdate(!update);
             }}
           >
-            {sizeOpen ? (
-              <FaCheck />
-            ) : (
-              <p
-                style={{
-                  fontSize: `${scale(sizeAmount, 0.5, 2, 10, 15)}px`,
-                }}
-              >
-                {Number(sizeAmount).toFixed(1)}
-              </p>
-            )}
+            <p
+              style={{
+                fontSize: `${scale(sizeAmount, 0.5, 2, 10, 15)}px`,
+              }}
+            >
+              {Math.floor(scale(Number(sizeAmount), 0.5, 2, 1, 10))}
+            </p>
           </button>
           {sizeOpen && (
-            <div className="absolute bottom-0 z-50 flex items-center h-8 gap-2 px-2 bg-white rounded-lg shadow-lg dark:bg-slate-900 dark:ring-2 dark:ring-slate-400 w-fit left-[42px] ">
-              {/* Range slider for size 0-2 */}
+            <div className="absolute bottom-0 z-50 flex items-center h-8 gap-2 px-2 bg-white rounded-lg shadow-lg dark:bg-slate-900 dark:ring-2 dark:ring-slate-400 w-fit left-[42px] fade-effect-fast ">
               <input
                 type="range"
                 min="0.5"
@@ -337,13 +295,14 @@ function HabitUnit({
                   setAllHabits(array);
                   setUpdate(!update);
                 }}
-                className="w-20"
+                onMouseUp={() => {
+                  setSizeOpen(!sizeOpen);
+                }}
+                className="w-28"
               />
-              <p className="text-xs">{sizeAmount}</p>
             </div>
           )}
         </div>
-        {/* <p className="text-2xl font-bold">{habit.color}</p> */}
         <div className="relative flex items-center justify-center gap-2">
           <p
             className={
@@ -393,19 +352,14 @@ function HabitUnit({
         )}
         <button
           onClick={() => {
-            //   console.log(pointer);
             if (soundOn) {
               boop.play();
             }
             if (pointer > 0) {
-              console.log(array);
               array.splice(pointer, 1);
               setAllHabits(array);
               setUpdate(!update);
             }
-            // setAllHabits(
-            //     allHabits.filter((habit) => habit.num !== index)
-            // )
           }}
         >
           <FaTrashAlt
