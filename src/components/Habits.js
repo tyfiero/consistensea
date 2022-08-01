@@ -1,20 +1,16 @@
 /*global chrome*/
 
 import Circle from "./Circle";
-import { createRef, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { localMode } from "../lib/constants";
 import { Fireworks } from "@fireworks-js/react";
-import { FaCheck, FaCheckCircle, FaCog, FaPlus, FaTimes } from "react-icons/fa";
+import { FaCheckCircle } from "react-icons/fa";
 import { useLocalStorage } from "../lib/useLocalStorage";
 import Draggable from "react-draggable";
-import { useWindowSize } from "../lib/useWindowSize";
 import SettingsMenu from "./SettingsMenu";
-import { ResizableBox } from "react-resizable";
 
 function Habits({ setUrl }) {
-  console.log("------------------Habit Render------------------");
-
   const [update, setUpdate] = useState(false);
   const [message, setMessage] = useLocalStorage(
     "CSMessage",
@@ -22,9 +18,6 @@ function Habits({ setUrl }) {
   );
   const [soundOn, setSoundOn] = useLocalStorage("CSSoundOption", true);
   const [fireworks, setFireworks] = useLocalStorage("CSFireworksOption", true);
-
-  // const windowSize = useWindowSize();
-  // console.log(windowSize);
   let beep = new Audio("assets/click.mp3");
   beep.volume = 0.4;
   let boop = new Audio("assets/click2.mp3");
@@ -35,7 +28,6 @@ function Habits({ setUrl }) {
   let successJingle = new Audio("assets/success.wav");
   successJingle.volume = 0.5;
   const [partyTime, setPartyTime] = useState(false);
-
   const [allHabits, setAllHabits] = useLocalStorage("CSHabits", [
     {
       name: "Twitter",
@@ -57,12 +49,9 @@ function Habits({ setUrl }) {
       streak: 0,
     },
   ]);
-  // console.log(allHabits);
-  //This is the cloned all habits array
   let array = allHabits;
 
   const calcRemainingTime = (habit) => {
-    // console.log(habit);
     let now = Number((new Date().getTime() / 1000).toFixed(0));
     if (habit.playing === true && now - habit.startedAt > 2) {
       let fullTime = habit.time * 60;
@@ -71,9 +60,6 @@ function Habits({ setUrl }) {
       let timeElapsedSinceClose = now - (startedTime + timeElapsedAtClose);
       let newRemaining =
         fullTime - (timeElapsedAtClose + timeElapsedSinceClose);
-      // console.log(habit.remaining + " time shown  ");
-      // console.log(newRemaining + " time it should display");
-      // console.log(array[habit.num]);
       if (newRemaining > 0) {
         return newRemaining;
       } else {
@@ -92,21 +78,12 @@ function Habits({ setUrl }) {
 
   const resetForNewDay = (habit) => {
     // for each done habit, if the date is not today, set done to false. Note, I am treating the "lastDone" key as the last day the habit was done. Therefore, I will not reassign the date to today, but I will set done to false. That way I can the date key to keep track of a streak in the future
-    let today = new Date().getMinutes();
-
-    console.log(
-      habit.lastDone +
-        " = " +
-        today +
-        " today?" +
-        " " +
-        habit.name +
-        " Done? -> " +
-        habit.done
-    );
+    let today = new Date().toLocaleDateString("en-us", {
+      month: "long",
+      day: "numeric",
+    });
 
     if (habit.done === true && habit.lastDone !== today) {
-      console.log("++++IS DONE, And TIME DIFF" + habit.done + " " + habit.name);
       habit.remaining = habit.time * 60;
       habit.done = false;
       habit.playing = false;
@@ -115,19 +92,14 @@ function Habits({ setUrl }) {
       setUpdate(!update);
     }
   };
-
-  //-------------------------------------------------------------------------
-  //Reset after new day useEffect
   useEffect(() => {
     array.forEach((item) => {
       if (item.done === true) {
         resetForNewDay(item);
       }
     });
-    // console.log(array);
   }, []);
 
-  //-------------------------------------------------------------------------
   const setPlay = useCallback(
     (id, bool) => {
       if (soundOn) {
@@ -144,7 +116,6 @@ function Habits({ setUrl }) {
     [allHabits, update, setAllHabits]
   );
 
-  //-------------------------------------------------------------------------
   const setRemaining = useCallback(
     (id, remaining) => {
       array[id].remaining = remaining;
@@ -152,42 +123,29 @@ function Habits({ setUrl }) {
     },
     [allHabits, setAllHabits]
   );
-
-  //-------------------------------------------------------------------------
   const setAsDone = useCallback(
     (id) => {
       if (soundOn) {
         pop.play();
       }
-      let today = new Date().getMinutes();
-      // let today = new Date().toLocaleDateString("en-us", {
-      //   month: "long",
-      //   day: "numeric",
-      // });
-
-      // console.log(array[id].lastDone + array[id].done + " before assignment");
-      // console.log(array[id].done + " .done = false ?");
-
+      let today = new Date().toLocaleDateString("en-us", {
+        month: "long",
+        day: "numeric",
+      });
       if (array[id].done === false) {
-        // const difference =
-        //   parseInt(today.lastDone.split("/")[1]) -
-        //   parseInt(array[id].lastDone.split("/")[1]);
-        const difference = today - array[id].lastDone;
-        // console.log(today + " - " + array[id].lastDone);
-
-        // console.log(difference);
+        const difference =
+          parseInt(today.lastDone.split("/")[1]) -
+          parseInt(array[id].lastDone.split("/")[1]);
         if (difference === 1) {
           array[id].streak++;
         } else {
           array[id].streak = 0;
         }
-
         array[id].done = true;
-        array[id].lastDone = new Date().getMinutes();
-        //   array[id].lastDone = new Date().toLocaleDateString("en-us", {
-        //     month: "long",
-        //     day: "numeric",
-        //   });
+        array[id].lastDone = new Date().toLocaleDateString("en-us", {
+          month: "long",
+          day: "numeric",
+        });
 
         if (!localMode) {
           chrome.notifications.create("", {
@@ -206,14 +164,9 @@ function Habits({ setUrl }) {
           party();
         }
       }
-      console.log(array[id].lastDone + " after assignment");
-      // };
     },
     [allHabits, update, setAllHabits]
   );
-
-  //-------------------------------------------------------------------------
-
   const party = () => {
     setPartyTime(true);
     if (soundOn) {
@@ -234,17 +187,6 @@ function Habits({ setUrl }) {
       setPartyTime(false);
     }, 9000);
   };
-
-  // const resetAllForDay = () => {
-  //   array.forEach((item) => {
-  //     item.remaining = item.time * 60;
-  //     item.done = false;
-  //     item.playing = false;
-  //   });
-
-  //   setAllHabits(array);
-  // };
-
   return (
     <>
       <div className="w-full h-screen page-container parent">
@@ -302,19 +244,13 @@ function Habits({ setUrl }) {
           ) : null}
         </AnimatePresence>
         <div className="w-full h-full ">
-          {/* <motion.div className="flex flex-wrap items-center content-center justify-center w-full h-full gap-3 "> */}
           {allHabits.map((habit, index) => {
-            // console.log(
-            //   habit.position.x + " " + habit.position.y + "  " + habit.name
-            // );
-
             return (
               <Draggable
                 position={habit.position}
                 key={index}
                 bounds="parent"
                 onStop={(e, data) => {
-                  console.log(data);
                   array[index].position = { x: data.x, y: data.y };
                   setAllHabits(array);
                   setUpdate(!update);
@@ -323,12 +259,6 @@ function Habits({ setUrl }) {
                 <div className={"   w-fit h-fit absolute "}>
                   <motion.div
                     className={habit.size + "   w-fit h-fit absolute "}
-                    // initial={{ opacity: 0 }}
-                    // animate={{ opacity: 1 }}
-                    // transition={{
-                    //   duration: 0.6,
-                    //   delay: habit.num * 0.2,
-                    // }}
                     style={{ transform: `scale(${habit.size})` }}
                   >
                     <Circle

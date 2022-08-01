@@ -14,7 +14,6 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
-// import { useWindowSize } from "../lib/useWindowSize";
 
 function Circle({
   num,
@@ -31,7 +30,6 @@ function Circle({
   size,
   src,
 }) {
-  // console.log(remaining + " from circle init");
   const [key, setKey] = useState(0);
   const [mounted, setMounted] = useState(true);
   const [bgColor, setBgColor] = useState(
@@ -39,28 +37,6 @@ function Circle({
   );
   const [ringColor, setRingColor] = useState("#0369a1");
   const [textColor, setTextColor] = useState("  text-sky-800");
-  // const [bounds, setBounds] = useState({
-  //   top: 100,
-  //   left: 100,
-  //   right: 100,
-  //   bottom: 100,
-  // });
-  // const windowSize = useWindowSize();
-
-  // useEffect(() => {
-  //   setBounds({
-  //     top: circleRef.current.getBoundingClientRect().top * -1 + 80,
-  //     left: circleRef.current.getBoundingClientRect().left * -1 + 100,
-  //     right:
-  //       windowSize.width -
-  //       circleRef.current.getBoundingClientRect().right -
-  //       100,
-  //     bottom:
-  //       windowSize.height -
-  //       circleRef.current.getBoundingClientRect().bottom -
-  //       100,
-  //   });
-  // }, [windowSize]);
 
   const circleRef = useRef(null);
 
@@ -146,14 +122,10 @@ function Circle({
       setMounted(true);
     }
   }, [done]);
-  //This function renders the content inside the svg circle
-  const RenderTime = ({ remainingTime }) => {
-    // console.log(remainingTime);
-    var audioRef = useRef(null);
 
+  const RenderTime = ({ remainingTime }) => {
     const hours = Math.floor(remainingTime / 3600);
     const minutes = Math.floor((remainingTime % 3600) / 60);
-    // const minutes = Math.floor(remainingTime / 60);
     let seconds = remainingTime % 60;
     const stringifiedSeconds = seconds > 9 ? seconds : `0${seconds}`;
     const stringifiedMinutes = minutes > 9 ? minutes : `0${minutes}`;
@@ -163,12 +135,11 @@ function Circle({
     } else {
       timeLeft = `${minutes}:${stringifiedSeconds}`;
     }
-
     return (
       <div className="relative flex items-center justify-center w-full h-full p-2 group">
         <div
           className={
-            " rounded-full w-full h-full  shadow-xl flex flex-col items-center justify-center    " +
+            " rounded-full w-full h-full shadow-xl flex flex-col items-center justify-center " +
             bgColor
           }
         >
@@ -239,8 +210,6 @@ function Circle({
               "items-center justify-center hidden gap-2 text-5xl font-bold transition group-hover:flex cursor-pointer  rounded-xl hover:scale-110 active:scale-90  mt-1 hover:brightness-150 dark:hover:brightness-90 f2  "
             }
             onClick={() => {
-              // console.log(playing + " on click");
-
               if (playing) {
                 setPlay(num, false);
               } else {
@@ -251,12 +220,10 @@ function Circle({
             {" "}
             {playing ? (
               <>
-                {/* <p className={textColor}>Stop</p> */}
                 <FaPause className={textColor} />{" "}
               </>
             ) : (
               <>
-                {/* <p className={textColor}>Start</p> */}
                 <FaPlay className={textColor + " ml-3 "} />{" "}
               </>
             )}
@@ -276,8 +243,6 @@ function Circle({
         <motion.div
           className={"flex items-center cursor-move justify-center  handle  "}
           ref={circleRef}
-          // initial={{ opacity: 0, y: -300 }}
-          // animate={{ opacity: 1, y: 0 }}
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
