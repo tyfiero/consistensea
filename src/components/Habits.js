@@ -10,7 +10,11 @@ import { useLocalStorage } from "../lib/useLocalStorage";
 import Draggable from "react-draggable";
 import SettingsMenu from "./SettingsMenu";
 
-function Habits({ setUrl }) {
+// - You have my permission to increase number of images to 10 each.
+// - Test notifications
+// - Publish
+
+function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
   const [update, setUpdate] = useState(false);
   const [message, setMessage] = useLocalStorage(
     "CSMessage",
@@ -19,9 +23,9 @@ function Habits({ setUrl }) {
   const [soundOn, setSoundOn] = useLocalStorage("CSSoundOption", true);
   const [fireworks, setFireworks] = useLocalStorage("CSFireworksOption", true);
   let beep = new Audio("assets/click.mp3");
-  beep.volume = 0.4;
+  beep.volume = 1;
   let boop = new Audio("assets/click2.mp3");
-  boop.volume = 0.4;
+  boop.volume = 1;
   let pop = new Audio("assets/pop.wav");
   pop.volume = 0.1;
 
@@ -46,7 +50,7 @@ function Habits({ setUrl }) {
         x: Number(Math.floor(window.innerWidth * 0.38)),
         y: Number(Math.floor(window.innerHeight * 0.38)),
       },
-      streak: 0,
+      daysDone: [],
     },
   ]);
   let array = allHabits;
@@ -64,7 +68,8 @@ function Habits({ setUrl }) {
         return newRemaining;
       } else {
         setPlay(habit.num, false);
-        setAsDone(habit.num);
+        console.log("calc time ran");
+        setAsDone(habit.num, false);
         return habit.time * 60;
       }
     } else {
@@ -77,7 +82,7 @@ function Habits({ setUrl }) {
   };
 
   const resetForNewDay = (habit) => {
-    // for each done habit, if the date is not today, set done to false. Note, I am treating the "lastDone" key as the last day the habit was done. Therefore, I will not reassign the date to today, but I will set done to false. That way I can the date key to keep track of a streak in the future
+    // for each done habit, if the date is not today, set done to false.
     let today = new Date().toLocaleDateString("en-us", {
       month: "long",
       day: "numeric",
@@ -87,7 +92,7 @@ function Habits({ setUrl }) {
       habit.remaining = habit.time * 60;
       habit.done = false;
       habit.playing = false;
-
+      console.log("reset for day");
       setAllHabits(array);
       setUpdate(!update);
     }
@@ -124,8 +129,8 @@ function Habits({ setUrl }) {
     [allHabits, setAllHabits]
   );
   const setAsDone = useCallback(
-    (id) => {
-      if (soundOn) {
+    (id, sound) => {
+      if (soundOn && sound) {
         pop.play();
       }
       let today = new Date().toLocaleDateString("en-us", {
@@ -133,14 +138,8 @@ function Habits({ setUrl }) {
         day: "numeric",
       });
       if (array[id].done === false) {
-        const difference =
-          parseInt(today.lastDone.split("/")[1]) -
-          parseInt(array[id].lastDone.split("/")[1]);
-        if (difference === 1) {
-          array[id].streak++;
-        } else {
-          array[id].streak = 0;
-        }
+        //I was going to add streaks here, but the method I was using would not be able to tell if the habit was done yesterday if today is the 1st and yesterday was the last day of the month. I have opted against adding stats for now. If i feel like adding them later, I will by using the npm package date-streaks. In this function, I would add today to the array of completed days, and then feed that array into date-streaks to get the streak and other stats. I would then need to display these stats in the settings menu or in it's own unique menu. But thats too much work for now. I will however begin to add the stats to the daysDone array, so that in the future when I add it, the users old stats will be there.
+        array[id].daysDone.push(new Date());
         array[id].done = true;
         array[id].lastDone = new Date().toLocaleDateString("en-us", {
           month: "long",
@@ -161,6 +160,7 @@ function Habits({ setUrl }) {
 
         let done = allHabits.filter((item) => item.done === true);
         if (done.length === allHabits.length) {
+          console.log("Party fired");
           party();
         }
       }
@@ -285,10 +285,12 @@ function Habits({ setUrl }) {
         </div>
 
         {allHabits.filter((item) => item.done === true).length > 0 ? (
-          <div className="fixed  top-0 right-0 rounded-bl-2xl flex flex-wrap items-start flex-col fade-effect-quick justify-center bg-gradient-to-b from-sky-300 via-sky-300 to-sky-200 dark:from-slate-400 dark:via-slate-500 dark:to-slate-800    gap-1 px-5 py-1 max-w-[11em] ">
-            <p className="f1 dark:text-slate-200/70 f2 text-sky-700 ">
-              Completed
-            </p>
+          <div className="fixed  top-0 right-0 rounded-bl-2xl flex flex-wrap items-start flex-col fade-effect-quick justify-center bg-gradient-to-b from-sky-300 via-sky-300 to-sky-200 dark:from-slate-600 dark:via-slate-700 dark:to-slate-900    gap-1 !px-5 py-1 max-w-[14em] ">
+            <div className="w-full">
+              <p className="text-center f1 dark:text-slate-300 f2 text-sky-700">
+                Completed
+              </p>
+            </div>
             {allHabits.map((habit, index) => {
               if (habit.done) {
                 return (
@@ -324,7 +326,11 @@ function Habits({ setUrl }) {
 
             {allHabits.filter((item) => item.done === true).length ===
             allHabits.length ? (
-              <p className="fade-effect-quick f1 ">All done! 😀</p>
+              <div className="flex justify-center w-full">
+                <p className="text-center fade-effect-quick f1 whitespace-nowrap">
+                  All done! 😀
+                </p>
+              </div>
             ) : null}
           </div>
         ) : null}
@@ -336,11 +342,14 @@ function Habits({ setUrl }) {
         fireworks={fireworks}
         setMessage={setMessage}
         message={message}
-        setUrl={setUrl}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
         setUpdate={setUpdate}
         update={update}
         allHabits={allHabits}
         setAllHabits={setAllHabits}
+        setWelcome={setWelcome}
+        welcome={welcome}
       />
     </>
   );

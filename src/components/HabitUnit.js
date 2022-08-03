@@ -25,9 +25,10 @@ function HabitUnit({
   let defaultTime = habit.unit === "min" ? habit.time : habit.time / 60;
   const [timeAmount, setTimeAmount] = useState(defaultTime);
   let beep = new Audio("assets/click.mp3");
-  beep.volume = 0.4;
+  beep.volume = 1;
   let boop = new Audio("assets/click2.mp3");
-  boop.volume = 0.4;
+  boop.volume = 1;
+
   let array = allHabits;
   const enter = useKeyPress("Enter");
   function scale(number, inMin, inMax, outMin, outMax) {
@@ -118,7 +119,7 @@ function HabitUnit({
         <p className="font-bold f1 text-l text-sky-700">{pointer + 1 + ". "}</p>
         <p
           className={
-            "absolute flex text-xs text-center -top-5 left-24 text-sky-400  f1 " +
+            "absolute flex text-xs text-center -top-5 left-24 font-bold text-sky-400  f1 " +
             (index === 0 ? " " : " !hidden")
           }
         >
@@ -144,15 +145,15 @@ function HabitUnit({
         <div className="hidden group-hover:flex bg-"></div>
         <p
           className={
-            "absolute flex text-xs text-center -top-5 left-10 text-slate-800/40  f1 " +
+            "absolute flex text-xs text-center -top-5 left-10  f1 font-bold text-sky-400 " +
             (index === 0 ? " " : " !hidden")
           }
         >
           Link
         </p>
         {src && (
-          <div className="absolute z-20 items-center hidden max-w-md gap-2 px-2 py-1 text-xs bg-white rounded-lg shadow-lg w-fit group-hover:flex h-fit dark:bg-slate-900 dark:ring-2 dark:ring-slate-400 top-8 fade-effect-quick">
-            <p className="break-words whitespace-pre-wrap">{src}</p>
+          <div className="absolute z-20 items-center hidden max-w-md gap-2 px-2 py-1 bg-white rounded-lg shadow-lg w-fit group-hover:flex h-fit dark:bg-slate-900 dark:ring-2 dark:ring-slate-400 top-8 fade-effect-quick ">
+            <p className="text-xs break-words whitespace-pre-wrap f1">{src}</p>
           </div>
         )}
         <input
@@ -172,7 +173,7 @@ function HabitUnit({
         />
         {src && (
           <button
-            className="absolute text-sky-600 dark:text-sky-200 top-[6px] right-1 dark:bg-black bg-white rounded-full hover:scale-110 active:scale-90"
+            className="absolute text-sky-600 dark:text-sky-200 top-[6px] right-1 dark:bg-black bg-white rounded-full hover:scale-110 active:scale-90 "
             onClick={() => {
               if (soundOn) {
                 boop.play();
@@ -192,7 +193,7 @@ function HabitUnit({
           <div className="flex items-center justify-between gap-1 !w-24 relative">
             <p
               className={
-                "absolute flex text-xs text-center -top-5 left-4 text-slate-800/40 f1 " +
+                "absolute flex text-xs text-center -top-5 left-4 font-bold text-sky-400 f1 " +
                 (index === 0 ? " " : " !hidden")
               }
             >
@@ -217,7 +218,7 @@ function HabitUnit({
             />
             <p
               className={
-                "absolute flex text-xs text-center -top-5 -right-3 text-slate-800/40  f1" +
+                "absolute flex text-xs text-center -top-5 -right-3 font-bold text-sky-400  f1" +
                 (index === 0 ? " " : " !hidden")
               }
             >
@@ -255,7 +256,7 @@ function HabitUnit({
       <div className="relative flex justify-between w-1/3 gap-8">
         <p
           className={
-            "absolute flex text-xs text-center -top-4 left-7 text-slate-800/40  f1" +
+            "absolute flex text-xs text-center -top-4 left-7 font-bold text-sky-400  f1" +
             (index === 0 ? " " : " !hidden")
           }
         >
@@ -267,6 +268,9 @@ function HabitUnit({
               "font-bold rounded-full p-1 transition flex justify-center  bg-gradient-to-b from-sky-50 to-sky-200 dark:from-sky-500 dark:to-sky-800 shadow-xl md:hover:scale-105 active:scale-95 ring-2 ring-sky-400 text-sky-800  dark:text-sky-200 dark:ring-sky-300 f1 px-2 "
             }
             onClick={() => {
+              if (soundOn) {
+                beep.play();
+              }
               setSizeOpen(!sizeOpen);
             }}
           >
@@ -279,7 +283,7 @@ function HabitUnit({
             </p>
           </button>
           {sizeOpen && (
-            <div className="absolute bottom-0 z-50 flex items-center h-8 gap-2 px-2 bg-white rounded-lg shadow-lg dark:bg-slate-900 dark:ring-2 dark:ring-slate-400 w-fit left-[42px] fade-effect-fast ">
+            <div className="absolute bottom-0 z-50 flex items-center h-8 gap-2 px-2 bg-white rounded-lg shadow-lg dark:bg-slate-900 dark:ring-2 dark:ring-slate-400 w-fit left-[64px] fade-effect-fast ">
               <input
                 type="range"
                 min="0.5"
@@ -287,18 +291,18 @@ function HabitUnit({
                 step="0.1"
                 value={sizeAmount}
                 onChange={(e) => {
-                  if (soundOn) {
-                    beep.play();
-                  }
                   setSizeAmount(e.target.valueAsNumber);
                   array[pointer].size = e.target.valueAsNumber;
                   setAllHabits(array);
                   setUpdate(!update);
                 }}
                 onMouseUp={() => {
+                  if (soundOn) {
+                    boop.play();
+                  }
                   setSizeOpen(!sizeOpen);
                 }}
-                className="w-28"
+                className="bg-white w-28 dark:bg-slate-900"
               />
             </div>
           )}
@@ -306,7 +310,7 @@ function HabitUnit({
         <div className="relative flex items-center justify-center gap-2">
           <p
             className={
-              "absolute flex text-xs text-center -top-4 -left-2 text-slate-800/40  f1" +
+              "absolute flex text-xs text-center -top-4 -left-2 font-bold text-sky-400  f1" +
               (index === 0 ? " " : " !hidden")
             }
           >

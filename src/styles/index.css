@@ -6,15 +6,6 @@
   .page-container {
     @apply h-full w-full flex flex-col items-center px-5 fade-effect-quick;
   }
-  .heading-lg {
-    @apply text-center text-5xl mb-10 font-extrabold text-sky-600 dark:text-sky-100 f1;
-  }
-  .heading-md {
-    @apply text-center text-3xl mb-5 font-extrabold text-sky-600 dark:text-sky-100 f1;
-  }
-  .heading-sm {
-    @apply text-center text-xl mb-2 font-extrabold text-sky-600 dark:text-sky-100 f1;
-  }
   .textarea-tw {
     @apply bg-[hsla(200,0%,100%,1)]  dark:bg-[hsla(200,0%,10%,1)]  placeholder:text-slate-400 dark:placeholder:text-slate-300 text-slate-800 dark:text-slate-300 rounded-lg dark:!shadow-white ring-1;
   }
@@ -22,7 +13,7 @@
     @apply flex items-center gap-2 px-10 py-2 text-white transition rounded-full shadow-lg bg-sky-500 shadow-sky-300 hover:bg-sky-600 hover:shadow-sky-400 hover:shadow-xl hover:scale-105 active:scale-90;
   }
   p {
-    @apply text-sky-800 dark:text-sky-200 f2;
+    @apply text-sky-800 dark:text-sky-200 f2 text-base;
   }
   label {
     @apply text-slate-800 dark:text-slate-50 f2;
@@ -79,6 +70,69 @@ body {
   letter-spacing: 2px;
   font-display: block;
 }
+
+.grow-effect {
+  -webkit-animation: growIn 0.2s;
+  -moz-animation: growIn 0.2s;
+  -o-animation: growIn 0.2s;
+  -ms-animation: growIn 0.2s;
+  animation: growIn 0.9s;
+}
+@keyframes growIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes growIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes growIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@-o-keyframes growIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes growIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 
 .glass-box {
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);

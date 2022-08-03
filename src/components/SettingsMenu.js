@@ -4,7 +4,13 @@ import { colorOptions } from "../lib/colorOptions";
 import { useDarkMode } from "../lib/useDarkMode";
 import HabitUnit from "./HabitUnit";
 import { useLocalStorage } from "../lib/useLocalStorage";
-import { FaCheck, FaCog, FaPlus, FaTimes } from "react-icons/fa";
+import {
+  FaCheck,
+  FaCog,
+  FaPlus,
+  FaQuestionCircle,
+  FaTimes,
+} from "react-icons/fa";
 import { useClickOutside } from "../lib/useClickOutside";
 import { useWindowSize } from "../lib/useWindowSize";
 
@@ -19,70 +25,34 @@ function SettingsMenu({
   setMessage,
   fireworks,
   message,
-  setUrl,
+  setDarkMode,
+  darkMode,
+  welcome,
+  setWelcome,
 }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  const [darkMode, setDarkMode] = useLocalStorage("CSDarkMode", [
-    "auto",
-    "💻 System",
-  ]);
   const menuRef = createRef();
   const windowSize = useWindowSize();
-  const theme = useDarkMode() ? "dark" : "light";
-
-  useEffect(() => {
-    darkFunc();
-    // setDarkMode(darkMode);
-    setUpdate(!update);
-  }, [darkMode, theme]);
 
   const darkOptions = [
     { value: "dark", label: "🌜 Dark" },
     { value: "light", label: "🔆 Light" },
     { value: "auto", label: "💻 System" },
   ];
-  const darkFunc = () => {
-    const root = window.document.documentElement;
-    if (darkMode[0] === "dark") {
-      let darkImg = [
-        "assets/dark.jpg",
-        "assets/dark2.jpg",
-        "assets/dark3.jpg",
-        "assets/dark4.jpg",
-        "assets/dark5.jpg",
-      ];
-      let randomDarkImg = darkImg[Math.floor(Math.random() * darkImg.length)];
-      document.querySelector(":root").style.setProperty("--bg", "black");
-      root.classList.add("dark");
-      setUrl(randomDarkImg);
-    } else if (darkMode[0] === "light") {
-      let img = [
-        "assets/img1.jpg",
-        "assets/img2.jpg",
-        "assets/img3.jpg",
-        "assets/img4.jpg",
-      ];
-      let randomImg = img[Math.floor(Math.random() * img.length)];
-      document.querySelector(":root").style.setProperty("--bg", "white");
 
-      root.classList.remove("dark");
-      setUrl(randomImg);
-    } else {
-      theme === "dark"
-        ? root.classList.add("dark")
-        : root.classList.remove("dark");
-    }
-  };
   let beep = new Audio("assets/click.mp3");
-  beep.volume = 0.4;
+  beep.volume = 1;
   let boop = new Audio("assets/click2.mp3");
-  boop.volume = 0.4;
-
-  //---------------------------DARK MODE useEffect
+  boop.volume = 1;
+  let pop = new Audio("assets/pop.wav");
+  pop.volume = 0.05;
 
   const onClickOutside = (e) => {
-    if (e.target.id !== "cog") {
+    if (e.target.id !== "cog" && settingsOpen) {
+      if (soundOn) {
+        boop.play();
+      }
       setSettingsOpen(false);
     }
   };
@@ -96,7 +66,7 @@ function SettingsMenu({
   return (
     <>
       <div
-        className="absolute z-50 transition cursor-pointer top-3 left-3 hover:scale-125"
+        className="absolute z-50 transition cursor-pointer top-1 left-1 hover:scale-125"
         onClick={() => {
           if (soundOn) {
             beep.play();
@@ -104,16 +74,13 @@ function SettingsMenu({
           setSettingsOpen(!settingsOpen);
         }}
       >
-        <FaCog
-          id={"cog"}
-          className="scale-150 text-sky-700/80 dark:text-white/70"
-        />
+        <FaCog id={"cog"} className="text-3xl text-white/70" />
       </div>
       {settingsOpen && (
         <div className="absolute flex items-center justify-center w-full h-full ">
           <div
             ref={menuRef}
-            className="z-50 w-fit px-5 py-2 transition rounded-lg shadow-xl select-none h-fit min-h-[30%] max-h-[95%] bg-white/90 dark:bg-slate-700/90 fade-effect-fast relative"
+            className="z-40 w-fit px-5 py-2 transition rounded-lg shadow-xl select-none h-fit min-h-[30%] max-h-[95%] bg-white/90 dark:bg-slate-700/90 fade-effect-fast relative"
           >
             <div className="flex flex-col items-center justify-center w-full h-full">
               <div className="flex items-center gap-2 m-0">
@@ -145,9 +112,18 @@ function SettingsMenu({
               >
                 <FaTimes />
               </button>
-             
+              <button
+                className="absolute text-2xl top-3 left-3 text-sky-600 dark:text-sky-200 hover:scale-110 "
+                onClick={() => {
+                  if (soundOn) {
+                    boop.play();
+                  }
+                  setWelcome(!welcome);
+                }}
+              >
+                <FaQuestionCircle />
+              </button>
               <div className="flex flex-col items-center justify-center w-full h-full mt-4">
-               
                 <div className="flex justify-center w-full gap-10 ml-36">
                   <div className="flex flex-col gap-10">
                     <p className="mt-1 f1">Sounds</p>
@@ -200,13 +176,18 @@ function SettingsMenu({
 
                   <div className="flex flex-col items-start gap-4 mb-2">
                     <Select
-                      className="my-react-select-container !w-fit min-w-fit "
-                      classNamePrefix="my-react-select"
+                      className="react-select-container !w-fit min-w-fit "
+                      classNamePrefix="react-select"
                       placeholder={darkMode[1]}
                       options={darkOptions}
-                      onChange={(e) => {
+                      onFocus={() => {
                         if (soundOn) {
                           beep.play();
+                        }
+                      }}
+                      onChange={(e) => {
+                        if (soundOn) {
+                          boop.play();
                         }
                         setDarkMode([e.value, e.label]);
                       }}
@@ -247,9 +228,8 @@ function SettingsMenu({
                       let randomColor = colorOptions[colorIndex].colorText;
 
                       let randomSize = (Math.random() * 0.6 + 0.7).toFixed(1);
-                      console.log(randomSize);
                       if (soundOn) {
-                        beep.play();
+                        pop.play();
                       }
                       setAllHabits([
                         ...allHabits,
@@ -258,19 +238,19 @@ function SettingsMenu({
                           src: "",
                           time: 10,
                           remaining: 10 * 60,
-                          playing: false,
                           unit: "min",
+                          num: allHabits.length,
                           color: randomColor,
                           size: randomSize,
                           done: false,
+                          playing: false,
                           lastDone: null,
-                          streak: 0,
                           startedAt: null,
-                          num: allHabits.length,
                           position: {
                             x: randomPosition().x,
                             y: randomPosition().y,
                           },
+                          daysDone: [],
                         },
                       ]);
                     }}
@@ -282,7 +262,7 @@ function SettingsMenu({
                   </button>
                 </div>
                 <button
-                  className="flex items-center justify-center w-4/6 h-10 gap-2 mt-4 mb-2 font-bold transition duration-500 rounded-lg shadow-xl dark:text-sky-200 text-sky-100 bg-gradient-to-br from-sky-300 via-sky-500 to-sky-700 dark:from-sky-500 dark:via-sky-700 dark:to-sky-900 hover:scale-110 active:scale-95 "
+                  className="flex items-center justify-center w-4/6 h-10 gap-2 mt-4 mb-2 font-bold transition duration-500 rounded-lg shadow-xl dark:text-sky-200 text-sky-100 bg-gradient-to-br from-sky-300 via-sky-500 to-sky-700 dark:from-sky-500 dark:via-sky-700 dark:to-sky-900 hover:scale-110 active:scale-95 f2"
                   onClick={() => {
                     if (soundOn) {
                       boop.play();

@@ -178,19 +178,7 @@ function Circle({
             >
               <FaUndo />
             </button>
-            {src && (
-              <a
-                href={src}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={
-                  "items-center hidden gap-2 h-8 w-8 justify-center font-bold  transition rounded-lg group-hover:flex hover:scale-110 active:scale-90  hover:bg-white/40 dark:hover:bg-slate-800/40  text-base f1 " +
-                  textColor
-                }
-              >
-                <FaExternalLinkAlt />
-              </a>
-            )}
+
             <button
               className={
                 "items-center hidden gap-1  h-8 w-8 justify-center font-bold transition group-hover:flex rounded-xl cursor-pointer   hover:scale-110 active:scale-90 text-base hover:bg-white/40 dark:hover:bg-slate-800/40  " +
@@ -229,9 +217,24 @@ function Circle({
             )}
           </button>
 
-          <div className="items-center hidden h-10 group-hover:flex">
-            <p className={textColor}>{"Streak: " + streak}</p>
-            <p className={"text-sm"}>{streak > 2 ? "🔥" : ""}</p>
+          <div
+            className={
+              "flex gap-2 h-8 w-8  " + (src ? " opacity-100" : " opacity-0 ")
+            }
+          >
+            {src ? (
+              <a
+                href={src}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={
+                  "items-center hidden  h-8 w-8 justify-center font-bold  transition rounded-lg group-hover:flex hover:scale-110 active:scale-90  hover:bg-white/40 dark:hover:bg-slate-800/40  text-base f1 " +
+                  textColor
+                }
+              >
+                <FaExternalLinkAlt />
+              </a>
+            ) : null}
           </div>
         </div>
       </div>
@@ -284,14 +287,10 @@ function Circle({
               }
             }}
             onComplete={() => {
-              setPlay(num, false);
-              toast.success("Times up!", {
-                icon: "⏰",
-                position: "top-center",
-                duration: 6000,
-              });
-
-              setAsDone(num);
+              if (!done) {
+                setPlay(num, false);
+                setAsDone(num, true);
+              }
               setTimeout(() => {
                 setKey((prevKey) => prevKey + 1);
               }, 6000);
