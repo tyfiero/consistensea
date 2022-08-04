@@ -47,7 +47,6 @@ function App() {
     "auto",
     "💻 System",
   ]);
-  const [updateDarkMode, setUpdateDarkMode] = useState(false);
   const [url, setUrl] = useState(
     darkMode
       ? darkImg[Math.floor(Math.random() * darkImg.length)]

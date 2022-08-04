@@ -13,12 +13,9 @@
     "react-countdown-circle-timer": "^3.0.9",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.5",
-    "react-hot-toast": "^2.3.0",
     "react-icons": "^4.4.0",
-    "react-resizable": "^3.0.4",
     "react-scripts": "5.0.1",
     "react-select": "^5.4.0",
-    "unsplash-js": "^7.0.15",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

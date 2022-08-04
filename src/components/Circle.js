@@ -11,7 +11,6 @@ import {
 } from "react-icons/fa";
 
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 

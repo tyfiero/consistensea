@@ -9,12 +9,11 @@ import { FaCheckCircle } from "react-icons/fa";
 import { useLocalStorage } from "../lib/useLocalStorage";
 import Draggable from "react-draggable";
 import SettingsMenu from "./SettingsMenu";
-
-// - You have my permission to increase number of images to 10 each.
-// - Test notifications
-// - Publish
+import useMediaQuery from "../lib/useMediaQuery";
+import useWindowFocus from "../lib/useWindowFocus";
 
 function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
+  console.log("rerender habits");
   const [update, setUpdate] = useState(false);
   const [message, setMessage] = useLocalStorage(
     "CSMessage",
@@ -32,28 +31,37 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
   let successJingle = new Audio("assets/success.wav");
   successJingle.volume = 0.5;
   const [partyTime, setPartyTime] = useState(false);
-  const [allHabits, setAllHabits] = useLocalStorage("CSHabits", [
-    {
-      name: "Twitter",
-      src: "",
-      time: 10,
-      remaining: 10 * 60,
-      unit: "min",
-      num: 0,
-      color: "blue",
-      size: "1",
-      done: false,
-      playing: false,
-      lastDone: null,
-      startedAt: null,
-      position: {
-        x: Number(Math.floor(window.innerWidth * 0.38)),
-        y: Number(Math.floor(window.innerHeight * 0.38)),
+  const windowFocused = useWindowFocus();
+
+  const [allHabits, setAllHabits] = useLocalStorage(
+    "CSHabits",
+    [
+      {
+        name: "Twitter",
+        src: "",
+        time: 10,
+        remaining: 10 * 60,
+        unit: "min",
+        num: 0,
+        color: "blue",
+        size: "1",
+        done: false,
+        playing: false,
+        lastDone: null,
+        startedAt: null,
+        position: {
+          x: Number(Math.floor(window.innerWidth * 0.38)),
+          y: Number(Math.floor(window.innerHeight * 0.38)),
+        },
+        daysDone: [],
       },
-      daysDone: [],
-    },
-  ]);
+    ],
+    windowFocused
+  );
   let array = allHabits;
+
+  // const isDesktop = useMediaQuery("(min-width: 960px)");
+  // console.log(isDesktop);
 
   const calcRemainingTime = (habit) => {
     let now = Number((new Date().getTime() / 1000).toFixed(0));
@@ -151,7 +159,7 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
             type: "basic",
             iconUrl: "/small-logo.png",
             title: (array[id].name || "Timer") + " is done",
-            message: "Nice work, keep Going!",
+            message: "Nice work,keep going!",
             priority: 2,
           });
         }
@@ -160,7 +168,6 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
 
         let done = allHabits.filter((item) => item.done === true);
         if (done.length === allHabits.length) {
-          console.log("Party fired");
           party();
         }
       }
@@ -247,8 +254,8 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
           {allHabits.map((habit, index) => {
             return (
               <Draggable
-                position={habit.position}
                 key={index}
+                position={habit.position}
                 bounds="parent"
                 onStop={(e, data) => {
                   array[index].position = { x: data.x, y: data.y };
