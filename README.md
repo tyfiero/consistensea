@@ -1,7 +1,7 @@
 # ConsistenSea - New tab chrome extension to help you stay consistent with your habits.
 
 Keep your habits afloat with ConsistenSea!
-![Consistensea new tab image](./readme-image.png)
+![ConsistenSea new tab image](./readme-image.png "ConsistenSea UI")
 
 I designed it to be very simple, no extraneous
 features, just an easy way to keep track of your daily habits, and
