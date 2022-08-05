@@ -3,6 +3,7 @@ import Habits from "./components/Habits";
 import { useLocalStorage } from "./lib/useLocalStorage";
 import { useDarkMode } from "./lib/useDarkMode";
 import WelcomeModal from "./components/WelcomeModal";
+import Promo from "./components/Promo";
 function App() {
   const img = [
     "/light1.webp",
@@ -102,6 +103,7 @@ function App() {
           setWelcome={setWelcome}
           welcome={welcome}
         />
+        {/* <Promo /> */}
       </div>
     </div>
   );
