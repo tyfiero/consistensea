@@ -9,11 +9,9 @@ import { FaCheckCircle } from "react-icons/fa";
 import { useLocalStorage } from "../lib/useLocalStorage";
 import Draggable from "react-draggable";
 import SettingsMenu from "./SettingsMenu";
-import useMediaQuery from "../lib/useMediaQuery";
 import useWindowFocus from "../lib/useWindowFocus";
 
 function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
-  console.log("rerender habits");
   const [update, setUpdate] = useState(false);
   const [message, setMessage] = useLocalStorage(
     "CSMessage",
@@ -60,9 +58,6 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
   );
   let array = allHabits;
 
-  // const isDesktop = useMediaQuery("(min-width: 960px)");
-  // console.log(isDesktop);
-
   const calcRemainingTime = (habit) => {
     let now = Number((new Date().getTime() / 1000).toFixed(0));
     if (habit.playing === true && now - habit.startedAt > 2) {
@@ -76,7 +71,6 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
         return newRemaining;
       } else {
         setPlay(habit.num, false);
-        console.log("calc time ran");
         setAsDone(habit.num, false);
         return habit.time * 60;
       }
@@ -100,7 +94,7 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
       habit.remaining = habit.time * 60;
       habit.done = false;
       habit.playing = false;
-      console.log("reset for day");
+      console.log("Reset for day");
       setAllHabits(array);
       setUpdate(!update);
     }
@@ -141,10 +135,7 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
       if (soundOn && sound) {
         pop.play();
       }
-      let today = new Date().toLocaleDateString("en-us", {
-        month: "long",
-        day: "numeric",
-      });
+     
       if (array[id].done === false) {
         //I was going to add streaks here, but the method I was using would not be able to tell if the habit was done yesterday if today is the 1st and yesterday was the last day of the month. I have opted against adding stats for now. If i feel like adding them later, I will by using the npm package date-streaks. In this function, I would add today to the array of completed days, and then feed that array into date-streaks to get the streak and other stats. I would then need to display these stats in the settings menu or in it's own unique menu. But thats too much work for now. I will however begin to add the stats to the daysDone array, so that in the future when I add it, the users old stats will be there.
         array[id].daysDone.push(new Date());

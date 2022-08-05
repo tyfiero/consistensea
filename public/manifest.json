@@ -2,13 +2,13 @@
   "manifest_version": 3,
   "name": "ConsistenSea - New tab page for daily digital habits.",
   "short_name": "ConsistenSea",
-  "description": "Beautiful new tab page for being consistent with your habits.",
+  "description": "Beautiful nautical new tab page to help you be consistent with your habits.",
   "author": "Ty Fiero",
   "homepage_url": "http://tyfiero.com/",
   "version": "1.0.1",
   "permissions": ["storage", "notifications", "alarms", "background"],
   "action": {
-    "default_title": "ConsistenSea - Habit new tab",
+    "default_title": "ConsistenSea - New tab page for daily digital habits.",
     "default_popup": "index.html",
     "default_icon": {
       "32": "icon32.png"

@@ -1,7 +1,4 @@
-/*global chrome*/
-
 import { useState, useRef, useEffect } from "react";
-
 import {
   FaCheck,
   FaExternalLinkAlt,
@@ -9,7 +6,6 @@ import {
   FaPlay,
   FaUndo,
 } from "react-icons/fa";
-
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";

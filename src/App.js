@@ -1,11 +1,5 @@
-/*global chrome*/
 import { useEffect, useState } from "react";
 import Habits from "./components/Habits";
-import { fetchImages } from "./lib/unsplash";
-
-import { images } from "./lib/images";
-import { lowResImages } from "./lib/lowResImages";
-import { createApi } from "unsplash-js";
 import { useLocalStorage } from "./lib/useLocalStorage";
 import { useDarkMode } from "./lib/useDarkMode";
 import WelcomeModal from "./components/WelcomeModal";

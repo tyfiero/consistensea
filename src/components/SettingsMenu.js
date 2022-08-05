@@ -1,9 +1,8 @@
-import { createRef, useEffect, useState } from "react";
+import { createRef, useState } from "react";
 import Select from "react-select";
 import { colorOptions } from "../lib/colorOptions";
-import { useDarkMode } from "../lib/useDarkMode";
 import HabitUnit from "./HabitUnit";
-import { useLocalStorage } from "../lib/useLocalStorage";
+
 import {
   FaCheck,
   FaCog,

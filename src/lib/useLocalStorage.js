@@ -1,8 +1,4 @@
-/*global chrome*/
-
 import { useEffect, useRef, useState } from "react";
-import useWindowFocus from "./useWindowFocus";
-// import { localMode } from "./constants";
 //from useHooks.com, modified by me
 export function useLocalStorage(key, initialValue, windowFocused = null) {
   // State to store our value
