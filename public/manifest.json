@@ -4,7 +4,7 @@
   "short_name": "ConsistenSea",
   "description": "Beautiful nautical new tab page to help you be consistent with your habits.",
   "author": "Ty Fiero",
-  "homepage_url": "http://tyfiero.com/",
+  "homepage_url": "https://github.com/tyfiero/consistensea/tree/master",
   "version": "1.0.1",
   "permissions": ["storage", "notifications", "alarms", "background"],
   "action": {
