@@ -35,7 +35,7 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
     "CSHabits",
     [
       {
-        name: "Twitter",
+        name: "Read",
         src: "",
         time: 10,
         remaining: 10 * 60,
@@ -135,7 +135,7 @@ function Habits({ setDarkMode, darkMode, welcome, setWelcome }) {
       if (soundOn && sound) {
         pop.play();
       }
-     
+
       if (array[id].done === false) {
         //I was going to add streaks here, but the method I was using would not be able to tell if the habit was done yesterday if today is the 1st and yesterday was the last day of the month. I have opted against adding stats for now. If i feel like adding them later, I will by using the npm package date-streaks. In this function, I would add today to the array of completed days, and then feed that array into date-streaks to get the streak and other stats. I would then need to display these stats in the settings menu or in it's own unique menu. But thats too much work for now. I will however begin to add the stats to the daysDone array, so that in the future when I add it, the users old stats will be there.
         array[id].daysDone.push(new Date());
