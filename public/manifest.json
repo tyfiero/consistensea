@@ -6,7 +6,7 @@
   "author": "Ty Fiero",
   "homepage_url": "https://github.com/tyfiero/consistensea/tree/master",
   "version": "1.0.2",
-  "permissions": ["storage", "notifications", "alarms", "background"],
+  "permissions": ["notifications"],
   "action": {
     "default_title": "ConsistenSea - New tab page for daily digital habits.",
     "default_popup": "index.html",
