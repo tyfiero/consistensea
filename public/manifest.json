@@ -11,7 +11,7 @@
     "default_title": "ConsistenSea - New tab page for daily digital habits.",
     "default_popup": "index.html",
     "default_icon": {
-      "32": "icon32.png"
+      "32": "icons/icon32.png"
     }
   },
   "background": {
