@@ -5,18 +5,16 @@
   "description": "Beautiful nautical new tab page to help you be consistent with your habits.",
   "author": "Ty Fiero",
   "homepage_url": "https://github.com/tyfiero/consistensea/tree/master",
-  "version": "1.0.2",
-  "permissions": ["notifications"],
+  "version": "1.0.3",
+  "permissions": ["notifications", "background", "activeTab"],
   "action": {
     "default_title": "ConsistenSea - New tab page for daily digital habits.",
-    "default_popup": "index.html",
     "default_icon": {
       "32": "icons/icon32.png"
     }
   },
   "background": {
-    "service_worker": "background.js",
-    "type": "module"
+    "service_worker": "background.js"
   },
   "chrome_url_overrides": {
     "newtab": "index.html"

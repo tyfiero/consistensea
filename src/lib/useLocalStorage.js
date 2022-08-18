@@ -30,7 +30,6 @@ export function useLocalStorage(key, initialValue, windowFocused = null) {
       windowFocused &&
       JSON.stringify(storedValue) !== window.localStorage.getItem(key)
     ) {
-      console.log("rerender local storage");
       if (typeof window === "undefined") {
         setStoredValue(initialValue);
       }
